@@ -9,12 +9,12 @@ public class ExpedienteValidador
             message += "Debe ingresar un expediente validado";
         else
         {
-            if (expediente.Caratula == "")
+            if (expediente.Caratula == null || expediente.Caratula.Equals(""))
                 message += "El contenido del expediente no puede estar vacío";
             if (usuario <= 0)
                 message += "El ID del usuario tiene que ser mayor a 0";
         }
-        if (message != "")
+        if (!message.Equals(""))
             throw new ValidacionException(message);
         return true;
         // es correcto devolver un bool y una excepcion, o solo con la excepcion es suficiente?

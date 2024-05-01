@@ -5,7 +5,8 @@ public class CasoDeUsoExpedienteConsultaTodos(IExpedienteRepositorio expedienteR
     private readonly IExpedienteRepositorio _expedienteRepositorio = expedienteRepositorio;
     public List<Expediente> Ejecutar()
     {
-        return _expedienteRepositorio.Listar();
+        return _expedienteRepositorio.ListarTodos();
+
     }
 
 

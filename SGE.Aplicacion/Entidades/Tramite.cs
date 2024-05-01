@@ -52,29 +52,23 @@ public class Tramite
     public DateTime FechaUltModificacion { get; set; }
     public int UsuarioUltModificacion { get; set; }
 
-    private static List<Tramite> listaTramites = new List<Tramite>();
-    public static List<Tramite> TramitesCreados
+
+    public Tramite()
+    { }
+    public Tramite(DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion)
     {
-        get => new List<Tramite>(listaTramites);
+
+        FechaUltModificacion = fechaUltModificacion;
+        FechaCreacion = fechaCreacion;
+        UsuarioUltModificacion = usuarioUltModificacion;
     }
 
-
-
-    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion)
+    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion) : this(fechaCreacion, fechaUltModificacion, usuarioUltModificacion)
     {
         Id = id;
         ExpedienteId = expedienteId;
         Etiqueta = etiqueta;
         Contenido = contenido;
-        FechaCreacion = fechaCreacion;
-        FechaUltModificacion = fechaUltModificacion;
-        UsuarioUltModificacion = usuarioUltModificacion;
-        listaTramites.Add(this);
-    }
-
-    public Tramite()
-    {
-
     }
 
 

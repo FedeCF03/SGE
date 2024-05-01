@@ -34,40 +34,29 @@ public class Expediente
     // cada expediente asociado a un tramite???
 
     public int Id { get; set; }
-    public string? Caratula { get; set; }
-    public DateTime FechaCreacion { get; set; }
-    public DateTime FechaUltModificacion { get; set; }
+    public string Caratula { get; set; } = "";
+    public DateTime FechaCreacion { get; set; } = DateTime.Now;
+    public DateTime FechaUltModificacion { get; set; } = DateTime.Now;// cambiamos accesibilidad del set ? ya que cambiamos directamente el txt
     public int UsuarioUltModificacion { get; set; }
     public EstadoExpediente Estado { get; set; }
 
-
-    public Expediente(int id, string? caratula, int usuario, EstadoExpediente estado)
+    public Expediente(int idUsuario)
+    {
+        UsuarioUltModificacion = idUsuario;
+    }
+    public Expediente() { }
+    public Expediente(int id, string caratula, int idUsuario, EstadoExpediente estado) : this(idUsuario)
     {
         Id = id;
         Caratula = caratula;
-        FechaCreacion = DateTime.Now;
-        FechaUltModificacion = FechaCreacion;
         Estado = estado;
-        UsuarioUltModificacion = usuario;
     }
 
-    public Expediente()
+    public Expediente(int id, string caratula, DateTime fechaCreacion, DateTime fechaUltModificacin, int idUsuario, EstadoExpediente estado) : this(id, caratula, idUsuario, estado)
     {
-
+        FechaCreacion = fechaCreacion;
+        FechaUltModificacion = fechaUltModificacin;
     }
 
-    public void Alta(IExpedienteRepositorio expediente)
-    {
-        throw new NotImplementedException();
-    }
 
-    public void Baja(IExpedienteRepositorio expediente)
-    {
-        throw new NotImplementedException();
-    }
-
-    public void Modificacion(IExpedienteRepositorio expediente)
-    {
-        throw new NotImplementedException();
-    }
 }

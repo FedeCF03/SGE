@@ -1,6 +1,6 @@
 ﻿namespace SGE.Aplicacion;
 
-public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, TramiteValidador validador, ServicioAutorizacionProvisorio servicio)
+public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, TramiteValidador validador, ServicioAutorizacionProvisorio servicio, ServicioActualizacionEstado servicioActualizacionEstado)
 {
     private readonly ITramiteRepositorio _tramiteRepositorio = tramiteRepositorio;
     private readonly TramiteValidador _validador = validador;
@@ -10,8 +10,12 @@ public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio
     {
         try
         {
+            tramite.FechaUltModificacion = DateTime.Now;
             if (_servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion) && _validador.Validar(tramite, usuario))
+            {
                 _tramiteRepositorio.Modificar(tramite);
+                servicioActualizacionEstado.ActualizarEstado(tramite.ExpedienteId, usuario);
+            }
             return true;
         }
         catch (Exception e)

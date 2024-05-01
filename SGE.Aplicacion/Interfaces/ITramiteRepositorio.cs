@@ -12,5 +12,9 @@ public interface ITramiteRepositorio
     public List<Tramite> Listar();
 
     public List<Tramite> ListarPorEtiqueta(EtiquetaTramite etiqueta);
+    public Tramite? buscarUltimo(int idExpediente);
+
+    protected int DevolverIdInc();
+
 
 }
