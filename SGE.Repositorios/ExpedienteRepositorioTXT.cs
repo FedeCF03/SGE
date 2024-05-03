@@ -18,14 +18,14 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
         if (!File.Exists(_nombreIds))
         {
             using var sw = new StreamWriter(_nombreIds);
-            sw.WriteLine(0);
+            sw.WriteLine(1);
         }
     }
 
     public void Alta(Expediente expediente)
     {
         using var sw = new StreamWriter(_nombreArch, true);
-        sw.WriteLine(expediente.Id);
+        sw.WriteLine(DevolverIdInc());
         sw.WriteLine(expediente.Caratula);
         sw.WriteLine(expediente.FechaCreacion);
         sw.WriteLine(expediente.FechaUltModificacion);
@@ -70,7 +70,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
 
     public List<Expediente> ListarTodos()
     {
-        List<Expediente> listaRetornar = new List<Expediente>();
+        List<Expediente> listaRetornar = [];
         using var sr = new StreamReader(_nombreArch);
         {
             while (!sr.EndOfStream)
@@ -92,7 +92,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     // esta bien que devuelva una lista vacia si no encuentra nada?
     public List<Expediente> ListarPorEstado(EstadoExpediente estadoExpediente)
     {
-        List<Expediente> listaRetornar = new List<Expediente>();
+        List<Expediente> listaRetornar = [];
         using var sr = new StreamReader(File.OpenRead(_nombreArch));
         {
             while (!sr.EndOfStream)
@@ -113,14 +113,12 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     }
     public int DevolverIdInc()
     {
-        using var sr = new StreamReader(_nombreIds, true);
-        sr.ReadLine();
-        using var sw = new StreamWriter(_nombreIds, true);
-        sw.BaseStream.Seek(0, SeekOrigin.End);
+        var sr = new StreamReader(_nombreIds);
+        int id = int.Parse(sr.ReadLine() ?? "");
+        sr.Dispose();
+        using var sw = new StreamWriter(_nombreIds);
         {
-            int id = int.Parse(sr.ReadLine() ?? "");
-            id++;
-            sw.WriteLine(id);
+            sw.WriteLine(id + 1);
             return id;
         }
     }
@@ -140,20 +138,22 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
                     sr.ReadLine();
             }
 
-
+            // como hacer el pos ??? nos pone null
         }
         if (n != expediente.Id)
             return false;
-
+        Console.WriteLine("Expediente encontrado");
         pos = sr.BaseStream.Position;
         sr.Close();
 
-        using StreamWriter sw = new StreamWriter(_nombreArch);
+        using StreamWriter sw = new(_nombreArch, true);
         {
             Console.WriteLine(n + " " + expediente.Id);
             Console.WriteLine("Expediente encontrado");
             Console.WriteLine("Posicion: " + pos);
-            sw.BaseStream.Seek(pos, SeekOrigin.Begin);
+
+            sw.BaseStream.Position = pos;
+            sw.WriteLine(expediente.Id.ToString());
             sw.WriteLine(expediente.Caratula);
             sw.WriteLine(expediente.FechaCreacion);
             sw.WriteLine(expediente.FechaUltModificacion);
@@ -167,8 +167,8 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     {
         try
         {
-            using StreamReader sr = new StreamReader("fuente.txt");
-            using StreamWriter sw = new StreamWriter("fuente.txt");
+            using StreamReader sr = new("fuente.txt");
+            using StreamWriter sw = new("fuente.txt");
             int n = -1;
             while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
             {

@@ -7,11 +7,8 @@ tema incrementar id
 tema excepciones
 validacion de datos
 revisar impletacion de alta
-
-
-
+preguntar modificacion
 */
-Expediente expediente = new Expediente("holasdf", 5, EstadoExpediente.ReciénIniciado);
-
-CasoDeUsoExpedienteAlta casoDeUsoExpedienteAlta = new CasoDeUsoExpedienteAlta(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio(), new ExpedienteValidador());
-casoDeUsoExpedienteAlta.Ejecutar(1, expediente);
+Expediente expediente = new("fededsaasd", 6, EstadoExpediente.ReciénIniciado);
+CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteAlta = new(new ExpedienteRepositorioTXT());
+Console.WriteLine(casoDeUsoExpedienteAlta.Ejecutar().Count);

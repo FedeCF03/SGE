@@ -51,8 +51,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {
-              "projectPath": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj"
+            "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {
+              "projectPath": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj"
             }
           }
         }
