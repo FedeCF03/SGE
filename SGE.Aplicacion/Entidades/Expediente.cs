@@ -45,6 +45,7 @@ public class Expediente
         UsuarioUltModificacion = idUsuario;
     }
     public Expediente() { }
+
     public Expediente(string caratula, int idUsuario, EstadoExpediente estado)
     {
         Caratula = caratula;

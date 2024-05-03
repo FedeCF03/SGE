@@ -11,10 +11,7 @@ revisar impletacion de alta
 
 
 */
-Expediente expediente = new Expediente(20, "caratula", DateTime.Now, DateTime.Now, 1, EstadoExpediente.ReciénIniciado);
+Expediente expediente = new Expediente("holasdf", 5, EstadoExpediente.ReciénIniciado);
 
 CasoDeUsoExpedienteAlta casoDeUsoExpedienteAlta = new CasoDeUsoExpedienteAlta(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio(), new ExpedienteValidador());
 casoDeUsoExpedienteAlta.Ejecutar(1, expediente);
-CasoDeUsoExpedienteConsultaPorId casoDeUsoExpedienteConsultaPorId = new CasoDeUsoExpedienteConsultaPorId(new ExpedienteRepositorioTXT());
-Expediente exp = casoDeUsoExpedienteConsultaPorId.Ejecutar(18);
-Console.WriteLine($"Expediente: {exp.Id} - {exp.Caratula} - {exp.FechaCreacion} - {exp.FechaUltModificacion} - {exp.UsuarioUltModificacion} - {exp.Estado}");

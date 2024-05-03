@@ -8,6 +8,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
 
     readonly string _nombreArch = "expediente.txt";
 
+
     public ExpedienteRepositorioTXT()
     {
         if (!File.Exists(_nombreArch))
@@ -58,17 +59,13 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             }
             if (n == idExpediente)
             {
-
-
                 Expediente auxiliar = new Expediente(n, sr.ReadLine() ?? "", DateTime.Parse(sr.ReadLine() ?? ""), DateTime.Parse(sr.ReadLine() ?? ""), int.Parse(sr.ReadLine() ?? ""), (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? ""));
                 return auxiliar;
 
             }
             else
                 return null;
-
         }
-
     }
 
     public List<Expediente> ListarTodos()
@@ -131,33 +128,38 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     {
         //hay que pasar todo el expediente o solo los campos el estado?
         //suponemos que esta entero 7u7
-        try
+
+        long pos = -1;
+        int n = -1;
+        using var sr = new StreamReader(File.OpenRead(_nombreArch));
         {
-            using StreamReader sr = new StreamReader("fuente.txt");
-            using StreamWriter sw = new StreamWriter("fuente.txt");
-            int n = -1;
+            Console.WriteLine(sr.BaseStream.Length.ToString());
             while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != expediente.Id)
             {
                 for (int i = 0; i < 5; i++)
                     sr.ReadLine();
             }
-            if (n == expediente.Id)
-            {
-                sw.BaseStream.Seek(sr.BaseStream.Position, SeekOrigin.Begin);
-                sw.WriteLine(expediente.Caratula);
-                sw.WriteLine(expediente.FechaCreacion);
-                sw.WriteLine(expediente.FechaUltModificacion);
-                sw.WriteLine(expediente.UsuarioUltModificacion);
-                sw.WriteLine(expediente.Estado);
-            }
-            return n != -1;
 
 
         }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
+        if (n != expediente.Id)
             return false;
+
+        pos = sr.BaseStream.Position;
+        sr.Close();
+
+        using StreamWriter sw = new StreamWriter(_nombreArch);
+        {
+            Console.WriteLine(n + " " + expediente.Id);
+            Console.WriteLine("Expediente encontrado");
+            Console.WriteLine("Posicion: " + pos);
+            sw.BaseStream.Seek(pos, SeekOrigin.Begin);
+            sw.WriteLine(expediente.Caratula);
+            sw.WriteLine(expediente.FechaCreacion);
+            sw.WriteLine(expediente.FechaUltModificacion);
+            sw.WriteLine(expediente.UsuarioUltModificacion);
+            sw.WriteLine(expediente.Estado);
+            return true;
         }
 
     }

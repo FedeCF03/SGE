@@ -8,21 +8,15 @@ public class CasoDeUsoExpedienteModificacion(IExpedienteRepositorio expedienteRe
     private readonly ServicioAutorizacionProvisorio _servicioAutorizacionProvisorio = servicioAutorizacionProvisorio;
     public void Ejecutar(int iDusuario, Expediente expediente)
     {
-        try
-        {
-            expediente.FechaUltModificacion = DateTime.Now;
-            expediente.UsuarioUltModificacion = iDusuario;
-            if (_servicioAutorizacionProvisorio.PoseeElPermiso(iDusuario, Permiso.ExpedienteModificacion) && _expedienteValidador.Validar(expediente, iDusuario))
-                if (!_expedienteRepositorio.Modificacion(iDusuario, expediente))
-                {
-                    throw new RepositorioException("Error al modificar el expediente");
-                }
+        expediente.FechaUltModificacion = DateTime.Now;
+        expediente.UsuarioUltModificacion = iDusuario;
+        if (_servicioAutorizacionProvisorio.PoseeElPermiso(iDusuario, Permiso.ExpedienteModificacion) && _expedienteValidador.Validar(expediente, iDusuario))
+            if (!_expedienteRepositorio.Modificacion(iDusuario, expediente))
+            {
+                throw new RepositorioException("Error al modificar el expediente");
+            }
 
-        }//preguntar como usamos las excepciones 
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
+
 
     }
 
