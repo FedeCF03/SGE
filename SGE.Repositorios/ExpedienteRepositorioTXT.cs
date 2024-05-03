@@ -4,27 +4,27 @@ using System.Collections.Generic;
 using SGE.Aplicacion;
 public class ExpedienteRepositorioTXT : IExpedienteRepositorio
 {
-    readonly string _nombreIds = "ids.txt";
+    string NombreIds { get; } = "ids.txt";
 
-    readonly string _nombreArch = "expediente.txt";
+    string NombreArch { get; } = "expediente.txt";
 
 
     public ExpedienteRepositorioTXT()
     {
-        if (!File.Exists(_nombreArch))
+        if (!File.Exists(NombreArch))
         {
-            File.Create(_nombreArch);
+            File.Create(NombreArch);
         }
-        if (!File.Exists(_nombreIds))
+        if (!File.Exists(NombreIds))
         {
-            using var sw = new StreamWriter(_nombreIds);
+            using var sw = new StreamWriter(NombreIds);
             sw.WriteLine(1);
         }
     }
 
     public void Alta(Expediente expediente)
     {
-        using var sw = new StreamWriter(_nombreArch, true);
+        using var sw = new StreamWriter(NombreArch, true);
         sw.WriteLine(DevolverIdInc());
         sw.WriteLine(expediente.Caratula);
         sw.WriteLine(expediente.FechaCreacion);
@@ -49,7 +49,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
 
     public Expediente? BuscarPorId(int idExpediente)
     {
-        using var sr = new StreamReader(File.OpenRead(_nombreArch));
+        using var sr = new StreamReader(File.OpenRead(NombreArch));
         {
             int n = -1;
             while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
@@ -71,7 +71,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     public List<Expediente> ListarTodos()
     {
         List<Expediente> listaRetornar = [];
-        using var sr = new StreamReader(_nombreArch);
+        using var sr = new StreamReader(NombreArch);
         {
             while (!sr.EndOfStream)
             {
@@ -93,7 +93,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     public List<Expediente> ListarPorEstado(EstadoExpediente estadoExpediente)
     {
         List<Expediente> listaRetornar = [];
-        using var sr = new StreamReader(File.OpenRead(_nombreArch));
+        using var sr = new StreamReader(File.OpenRead(NombreArch));
         {
             while (!sr.EndOfStream)
             {
@@ -113,10 +113,10 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     }
     public int DevolverIdInc()
     {
-        var sr = new StreamReader(_nombreIds);
+        var sr = new StreamReader(NombreIds);
         int id = int.Parse(sr.ReadLine() ?? "");
         sr.Dispose();
-        using var sw = new StreamWriter(_nombreIds);
+        using var sw = new StreamWriter(NombreIds);
         {
             sw.WriteLine(id + 1);
             return id;
@@ -129,7 +129,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
 
         long pos = -1;
         int n = -1;
-        using var sr = new StreamReader(File.OpenRead(_nombreArch));
+        using var sr = new StreamReader(File.OpenRead(NombreArch));
         {
             Console.WriteLine(sr.BaseStream.Length.ToString());
             while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != expediente.Id)
@@ -146,7 +146,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
         pos = sr.BaseStream.Position;
         sr.Close();
 
-        using StreamWriter sw = new(_nombreArch, true);
+        using StreamWriter sw = new(NombreArch, true);
         {
             Console.WriteLine(n + " " + expediente.Id);
             Console.WriteLine("Expediente encontrado");

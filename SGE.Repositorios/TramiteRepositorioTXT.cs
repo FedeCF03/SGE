@@ -6,12 +6,12 @@ using SGE.Aplicacion;
 public class TramiteRepositorioTXT : ITramiteRepositorio
 {
     // como implementar el autoincremento de id; 
-    string _nombreArch { get; } = "tramites.txt";
-    string _nombreIds { get; } = "ids.txt";
+    string NombreArch { get; } = "tramites.txt";
+    string NombreIds { get; } = "ids.txt";
 
     public void Alta(Tramite tramite)
     {
-        using var sw = new StreamWriter(_nombreArch, true);
+        using var sw = new StreamWriter(NombreArch, true);
 
         {
             sw.WriteLine(DevolverIdInc());
@@ -33,7 +33,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     public Tramite? BuscarPorId(int idTramite)
     {
         Tramite auxiliar = new Tramite();
-        using var sr = new StreamReader(_nombreArch);
+        using var sr = new StreamReader(NombreArch);
         {
             while (!sr.EndOfStream && ((auxiliar.Id = int.Parse(sr.ReadLine() ?? "")) != idTramite))
             {
@@ -58,8 +58,8 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     }
     protected int DevolverIdInc()
     {
-        using var sr = new StreamReader(_nombreIds, true);
-        using var sw = new StreamWriter(_nombreIds, true);
+        using var sr = new StreamReader(NombreIds, true);
+        using var sw = new StreamWriter(NombreIds, true);
         {
             int id = int.Parse(sr.ReadLine() ?? "");
             id++;
@@ -72,7 +72,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     {
         List<Tramite> lista = new List<Tramite>();
 
-        using var sr = new StreamReader(File.OpenRead(_nombreArch));
+        using var sr = new StreamReader(File.OpenRead(NombreArch));
         {
             while (!sr.EndOfStream)
             {
@@ -97,11 +97,11 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     {
         List<Tramite> lista = new List<Tramite>();
 
-        using var sr = new StreamReader(_nombreArch);
+        using var sr = new StreamReader(NombreArch);
         {
             while (!sr.EndOfStream)
             {
-                Tramite auxiliar = new Tramite()
+                Tramite auxiliar = new()
                 {
                     Id = int.Parse(sr.ReadLine() ?? ""),
                     ExpedienteId = int.Parse(sr.ReadLine() ?? ""),
@@ -123,8 +123,8 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     public bool Modificar(Tramite tramite)
     {
         int n = 0;
-        using var sr = new StreamReader(_nombreArch);
-        using var sw = new StreamWriter(_nombreArch);
+        using var sr = new StreamReader(NombreArch);
+        using var sw = new StreamWriter(NombreArch);
         {
             while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != tramite.Id)
             {
@@ -153,7 +153,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     public Tramite? BuscarUltimo(int idExpediente)
     {
         Tramite auxiliar = new Tramite();
-        using var sr = new StreamReader(File.OpenRead(_nombreArch));
+        using var sr = new StreamReader(File.OpenRead(NombreArch));
         {
             while (!sr.EndOfStream)
             {
