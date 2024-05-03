@@ -13,6 +13,6 @@ public interface IExpedienteRepositorio
 
     public List<Expediente> ListarPorEstado(EstadoExpediente estado);
     public void ActualizarEstado(int idUsuario, int idExpediente, EstadoExpediente estado);
-    protected int DevolverIdInc();
+    public int DevolverIdInc();
 
 }

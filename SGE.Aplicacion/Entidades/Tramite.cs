@@ -47,30 +47,31 @@ public class Tramite
     public int Id { get; set; }
     public int ExpedienteId { get; set; }
     public EtiquetaTramite Etiqueta { get; set; }
-    public string? Contenido { get; set; }
-    public DateTime FechaCreacion { get; set; }
-    public DateTime FechaUltModificacion { get; set; }
+    public string? Contenido { get; set; } = "";
+    public DateTime FechaCreacion { get; set; } = DateTime.Now;
+    public DateTime FechaUltModificacion { get; set; } = DateTime.Now;
     public int UsuarioUltModificacion { get; set; }
 
 
     public Tramite()
     { }
-    public Tramite(DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion)
-    {
 
-        FechaUltModificacion = fechaUltModificacion;
-        FechaCreacion = fechaCreacion;
-        UsuarioUltModificacion = usuarioUltModificacion;
-    }
-
-    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion) : this(fechaCreacion, fechaUltModificacion, usuarioUltModificacion)
+    public Tramite(int expedienteId, EtiquetaTramite etiqueta, string contenido, int idUsuario)
     {
-        Id = id;
         ExpedienteId = expedienteId;
         Etiqueta = etiqueta;
         Contenido = contenido;
+        UsuarioUltModificacion = idUsuario;
+
     }
 
+    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion) : this(expedienteId, EtiquetaTramite.PaseAlArchivo, contenido, usuarioUltModificacion)
+    {
+        Id = id;
+        FechaCreacion = fechaCreacion;
+        FechaUltModificacion = fechaUltModificacion;
+
+    }
 
 
 }

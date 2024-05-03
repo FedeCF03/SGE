@@ -2,19 +2,19 @@ namespace SGE.Aplicacion;
 
 public interface ITramiteRepositorio
 {
-    public void Alta(Tramite tramite);
-    public void Baja(int idTramite);
+    void Alta(Tramite tramite);
+    void Baja(int idTramite);
 
     //No se puede modificar el id del tramite, asumimos que el id no se modifica en tramite
-    public void Modificar(Tramite tramite);
+    bool Modificar(Tramite tramite);
 
-    public Tramite BuscarPorId(int idTramite);
-    public List<Tramite> Listar();
+    Tramite? BuscarPorId(int idTramite);
+    List<Tramite> Listar();
 
-    public List<Tramite> ListarPorEtiqueta(EtiquetaTramite etiqueta);
-    public Tramite? buscarUltimo(int idExpediente);
+    List<Tramite> ListarPorEtiqueta(EtiquetaTramite etiqueta);
+    Tramite? BuscarUltimo(int idExpediente);
 
-    protected int DevolverIdInc();
+    int DevolverIdInc();
 
 
 }

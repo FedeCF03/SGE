@@ -6,14 +6,14 @@ public class CasoDeUsoExpedienteModificacion(IExpedienteRepositorio expedienteRe
     private readonly IExpedienteRepositorio _expedienteRepositorio = expedienteRepositorio;
     private readonly ExpedienteValidador _expedienteValidador = expedienteValidador;
     private readonly ServicioAutorizacionProvisorio _servicioAutorizacionProvisorio = servicioAutorizacionProvisorio;
-    public void Ejecutar(int usuario, Expediente expediente)
+    public void Ejecutar(int iDusuario, Expediente expediente)
     {
         try
         {
             expediente.FechaUltModificacion = DateTime.Now;
-            expediente.UsuarioUltModificacion = usu
-            if (_servicioAutorizacionProvisorio.PoseeElPermiso(usuario, Permiso.ExpedienteModificacion) && _expedienteValidador.Validar(expediente, usuario))
-                if (!_expedienteRepositorio.Modificacion(usuario, expediente))
+            expediente.UsuarioUltModificacion = iDusuario;
+            if (_servicioAutorizacionProvisorio.PoseeElPermiso(iDusuario, Permiso.ExpedienteModificacion) && _expedienteValidador.Validar(expediente, iDusuario))
+                if (!_expedienteRepositorio.Modificacion(iDusuario, expediente))
                 {
                     throw new RepositorioException("Error al modificar el expediente");
                 }

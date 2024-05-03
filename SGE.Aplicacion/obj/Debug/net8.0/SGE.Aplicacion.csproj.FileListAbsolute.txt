@@ -1,0 +1,12 @@
+c:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\SGE.Aplicacion.GeneratedMSBuildEditorConfig.editorconfig
+c:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\SGE.Aplicacion.AssemblyInfoInputs.cache
+c:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\SGE.Aplicacion.AssemblyInfo.cs
+c:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\SGE.Aplicacion.csproj.CoreCompileInputs.cache
+c:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\SGE.Aplicacion.sourcelink.json
+c:\Users\fedec\Downloads\SGE\SGE.Aplicacion\bin\Debug\net8.0\SGE.Aplicacion.deps.json
+C:\Users\fedec\Downloads\SGE\SGE.Aplicacion\bin\Debug\net8.0\SGE.Aplicacion.dll
+C:\Users\fedec\Downloads\SGE\SGE.Aplicacion\bin\Debug\net8.0\SGE.Aplicacion.pdb
+C:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\SGE.Aplicacion.dll
+C:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\refint\SGE.Aplicacion.dll
+C:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\SGE.Aplicacion.pdb
+c:\Users\fedec\Downloads\SGE\SGE.Aplicacion\obj\Debug\net8.0\ref\SGE.Aplicacion.dll

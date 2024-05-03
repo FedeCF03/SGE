@@ -5,11 +5,11 @@ using SGE.Aplicacion;
 
 public class TramiteRepositorioTXT : ITramiteRepositorio
 {
+    // como implementar el autoincremento de id; 
+    string _nombreArch { get; } = "tramites.txt";
+    string _nombreIds { get; } = "ids.txt";
 
-    readonly string _nombreArch = "tramites.txt";
-    readonly string _nombreIds = "ids.txt";
-
-    void Alta(Tramite tramite)
+    public void Alta(Tramite tramite)
     {
         using var sw = new StreamWriter(_nombreArch, true);
 
@@ -25,15 +25,36 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
 
     }
 
-    void ITramiteRepositorio.Baja(int idTramite)
+    public void Baja(int idTramite)
     {
         throw new NotImplementedException();
     }
 
-    Tramite ITramiteRepositorio.BuscarPorId(int idTramite)
+    public Tramite? BuscarPorId(int idTramite)
     {
-        throw new NotImplementedException();
-
+        Tramite auxiliar = new Tramite();
+        using var sr = new StreamReader(_nombreArch);
+        {
+            while (!sr.EndOfStream && ((auxiliar.Id = int.Parse(sr.ReadLine() ?? "")) != idTramite))
+            {
+                for (int i = 0; i < 6; i++)
+                    sr.ReadLine();
+            }
+            if (auxiliar.Id == idTramite)
+            {
+                auxiliar.ExpedienteId = int.Parse(sr.ReadLine() ?? "");
+                auxiliar.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
+                auxiliar.Contenido = sr.ReadLine();
+                auxiliar.FechaCreacion = DateTime.Parse(sr.ReadLine() ?? "");
+                auxiliar.FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
+                auxiliar.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+                return auxiliar;
+            }
+            else
+            {
+                return null;
+            }
+        }
     }
     protected int DevolverIdInc()
     {
@@ -47,7 +68,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         }
     }
 
-    List<Tramite> Listar()
+    public List<Tramite> Listar()
     {
         List<Tramite> lista = new List<Tramite>();
 
@@ -72,64 +93,90 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     }
 
 
-}
-
-List<Tramite> ListarPorEtiqueta(EtiquetaTramite etiqueta)
-{
-    List<Tramite> lista = new List<Tramite>();
-
-    using var sr = new StreamReader(File.OpenRead(_nombreArch));
+    public List<Tramite> ListarPorEtiqueta(EtiquetaTramite etiqueta)
     {
-        while (!sr.EndOfStream)
+        List<Tramite> lista = new List<Tramite>();
+
+        using var sr = new StreamReader(_nombreArch);
         {
-            Tramite auxiliar = new Tramite()
+            while (!sr.EndOfStream)
             {
-                Id = int.Parse(sr.ReadLine() ?? ""),
-                ExpedienteId = int.Parse(sr.ReadLine() ?? ""),
-                Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? ""),
-                Contenido = sr.ReadLine(),
-                FechaCreacion = DateTime.Parse(sr.ReadLine() ?? ""),
-                FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
-                UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "")
-            };
-            if (auxiliar.Etiqueta == etiqueta)
-                lista.Add(auxiliar);
-        }
-    }
-    return lista;
-
-
-}
-
-void Modificar(Tramite tramite, int usuario)
-{
-
-
-}
-
-public Tramite? buscarUltimo(int idExpediente)
-{
-    Tramite auxiliar = new Tramite();
-    using var sr = new StreamReader(File.OpenRead(_nombreArch));
-    {
-        while (!sr.EndOfStream)
-        {
-            auxiliar.Id = int.Parse(sr.ReadLine() ?? "");
-            auxiliar.ExpedienteId = int.Parse(sr.ReadLine() ?? "");
-            if (auxiliar.ExpedienteId == idExpediente)
-            {
-                auxiliar.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
-                auxiliar.Contenido = sr.ReadLine();
-                auxiliar.FechaCreacion = DateTime.Parse(sr.ReadLine() ?? "");
-                auxiliar.FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
-                auxiliar.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+                Tramite auxiliar = new Tramite()
+                {
+                    Id = int.Parse(sr.ReadLine() ?? ""),
+                    ExpedienteId = int.Parse(sr.ReadLine() ?? ""),
+                    Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? ""),
+                    Contenido = sr.ReadLine(),
+                    FechaCreacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "")
+                };
+                if (auxiliar.Etiqueta == etiqueta)
+                    lista.Add(auxiliar);
             }
-            for (int i = 0; i < 5; i++)
-                sr.ReadLine();
         }
-        if (auxiliar.ExpedienteId == idExpediente)
-            return auxiliar;
-        return null;
+        return lista;
+
+
     }
-}
+
+    public bool Modificar(Tramite tramite)
+    {
+        int n = 0;
+        using var sr = new StreamReader(_nombreArch);
+        using var sw = new StreamWriter(_nombreArch);
+        {
+            while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != tramite.Id)
+            {
+                for (int i = 0; i < 6; i++)
+                    sr.ReadLine();
+            }
+
+        }
+
+        if (n == tramite.Id)
+        {
+            sw.WriteLine(tramite.ExpedienteId);
+            sw.WriteLine(tramite.Etiqueta);
+            sw.WriteLine(tramite.Contenido);
+            sw.WriteLine(tramite.FechaCreacion);
+            sw.WriteLine(tramite.FechaUltModificacion);
+            sw.WriteLine(tramite.UsuarioUltModificacion);
+            return true;
+        }
+        return false;
+
+
+    }
+
+
+    public Tramite? BuscarUltimo(int idExpediente)
+    {
+        Tramite auxiliar = new Tramite();
+        using var sr = new StreamReader(File.OpenRead(_nombreArch));
+        {
+            while (!sr.EndOfStream)
+            {
+                auxiliar.Id = int.Parse(sr.ReadLine() ?? "");
+                auxiliar.ExpedienteId = int.Parse(sr.ReadLine() ?? "");
+                if (auxiliar.ExpedienteId == idExpediente)
+                {
+                    auxiliar.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
+                    auxiliar.Contenido = sr.ReadLine();
+                    auxiliar.FechaCreacion = DateTime.Parse(sr.ReadLine() ?? "");
+                    auxiliar.FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
+                    auxiliar.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+                }
+                for (int i = 0; i < 5; i++)
+                    sr.ReadLine();
+            }
+            if (auxiliar.ExpedienteId == idExpediente)
+                return auxiliar;
+            return null;
+        }
+    }
+    int ITramiteRepositorio.DevolverIdInc()
+    {
+        throw new NotImplementedException();
+    }
 }

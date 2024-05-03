@@ -114,7 +114,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
         }
         return listaRetornar;
     }
-    int DevolverIdInc()
+    public int DevolverIdInc()
     {
         using var sr = new StreamReader(_nombreIds, true);
         sr.ReadLine();
@@ -131,8 +131,6 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     {
         //hay que pasar todo el expediente o solo los campos el estado?
         //suponemos que esta entero 7u7
-        expediente.FechaUltModificacion = DateTime.Now;
-        expediente.UsuarioUltModificacion = idUsuario;
         try
         {
             using StreamReader sr = new StreamReader("fuente.txt");

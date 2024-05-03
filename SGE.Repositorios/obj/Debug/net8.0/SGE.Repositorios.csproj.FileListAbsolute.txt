@@ -1,0 +1,16 @@
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\bin\Debug\net8.0\SGE.Repositorios.deps.json
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\bin\Debug\net8.0\SGE.Repositorios.dll
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\bin\Debug\net8.0\SGE.Repositorios.pdb
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\bin\Debug\net8.0\SGE.Aplicacion.dll
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\bin\Debug\net8.0\SGE.Aplicacion.pdb
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.csproj.AssemblyReference.cache
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.AssemblyInfoInputs.cache
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.AssemblyInfo.cs
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.csproj.CoreCompileInputs.cache
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.sourcelink.json
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repo.5B6658F4.Up2Date
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.dll
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\refint\SGE.Repositorios.dll
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\SGE.Repositorios.pdb
+C:\Users\fedec\Downloads\SGE\SGE.Repositorios\obj\Debug\net8.0\ref\SGE.Repositorios.dll

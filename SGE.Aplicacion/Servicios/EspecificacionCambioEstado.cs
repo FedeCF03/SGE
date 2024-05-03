@@ -3,7 +3,7 @@ public class EspecificacionCambioDeEstado()
 {
     public EstadoExpediente buscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
     {
-        Tramite? tramiteAux = tramiteRepositorio.buscarUltimo(ExpedienteId);
+        Tramite? tramiteAux = tramiteRepositorio.BuscarUltimo(ExpedienteId);
         if (tramiteAux != null)
         {
             switch (tramiteAux.Etiqueta)
