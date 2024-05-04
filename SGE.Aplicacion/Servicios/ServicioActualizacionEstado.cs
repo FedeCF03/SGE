@@ -1,12 +1,12 @@
 ﻿namespace SGE.Aplicacion;
 
-public class ServicioActualizacionEstado(EspecificacionCambioDeEstado especificacionCambioDeEstado, IExpedienteRepositorio expedienteRepositorio, ITramiteRepositorio tramiteRepositorio)
+internal static class ServicioActualizacionEstado
 {
-    public void ActualizarEstado(int ExpedienteId, int idUsuario)
+    internal static void ActualizarEstado(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, int ExpedienteId, int idUsuario)
     {
         try
         {
-            EstadoExpediente estado = especificacionCambioDeEstado.buscarEstado(ExpedienteId, tramiteRepositorio);
+            EstadoExpediente estado = EspecificacionCambioDeEstado.buscarEstado(ExpedienteId, tramiteRepositorio);
             expedienteRepositorio.ActualizarEstado(idUsuario, ExpedienteId, estado);
         }
         catch (Exception e)

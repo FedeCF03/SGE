@@ -1,23 +1,14 @@
 namespace SGE.Aplicacion;
 
-public class ExpedienteValidador
+public static class ExpedienteValidador
 {
-    public bool Validar(Expediente expediente, int usuario)
+    public static bool Validar(Expediente expediente, int usuario)
     {
-        string message = "";
-        if (expediente == null)
-            message += "Debe ingresar un expediente validado";
-        else
-        {
-            if (expediente.Caratula == null || expediente.Caratula.Equals(""))
-                message += "El contenido del expediente no puede estar vacío";
-            if (usuario <= 0)
-                message += "El ID del usuario tiene que ser mayor a 0";
-        }
-        if (!message.Equals(""))
-            throw new ValidacionException(message);
+        if (expediente == null || expediente.Caratula == null || expediente.Caratula.Equals("") || (usuario <= 0))
+            return false;
         return true;
-        // es correcto devolver un bool y una excepcion, o solo con la excepcion es suficiente?
+
     }
 
 }
+// Compare this snippet from SGE.Aplicacion/Validadores/ExpedienteValidador.cs:

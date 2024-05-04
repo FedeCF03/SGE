@@ -5,8 +5,12 @@ public class CasoDeUsoTramiteConsultaPorEtiqueta(ITramiteRepositorio tramiteRepo
     private readonly ITramiteRepositorio _tramiteRepositorio = tramiteRepositorio;
     public List<Tramite> Ejecutar(EtiquetaTramite etiqueta)
     {
-        return _tramiteRepositorio.ListarPorEtiqueta(etiqueta);
-    }//preguntar validacion ? hacemos catch o no 
+        List<Tramite>? lista = _tramiteRepositorio.ListarPorEtiqueta(etiqueta);
+        if (lista == null || lista.Count == 0)
+            throw new RepositorioException("No hay expedientes para mostrar");
+        return lista;
+
+    }
 
 }
 

@@ -1,29 +1,27 @@
 ﻿namespace SGE.Aplicacion;
 
-public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, TramiteValidador validador, ServicioAutorizacionProvisorio servicio, ServicioActualizacionEstado servicioActualizacionEstado)
+public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, ServicioAutorizacionProvisorio servicio)
 {
     private readonly ITramiteRepositorio _tramiteRepositorio = tramiteRepositorio;
-    private readonly TramiteValidador _validador = validador;
     private readonly ServicioAutorizacionProvisorio _servicio = servicio;
 
-    public bool Ejecutar(int usuario, Tramite tramite)
+    public CasoDeUsoTramiteModificacion Ejecutar(int usuario, Tramite tramite)
     {
-        try
+        if (_servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion))
         {
-            tramite.FechaUltModificacion = DateTime.Now;
-            if (_servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion) && _validador.Validar(tramite, usuario))
-            {
-                _tramiteRepositorio.Modificar(tramite);
-                servicioActualizacionEstado.ActualizarEstado(tramite.ExpedienteId, usuario);
-            }
-            return true;
+            throw new AutorizacionExcepcion("No posee el permiso");
         }
-        catch (Exception e)
+        if (!TramiteValidador.Validar(tramite, usuario))
         {
-            Console.WriteLine(e.Message);
-            return false;
+            throw new ValidacionException("No se pudo validar el expediente");
         }
-        //Implementar try y catch acá o en consola principal
-        // hacemos throw excepcion dentro del validador o lo hacemos acá?
+
+        _tramiteRepositorio.Modificar(tramite);
+        ServicioActualizacionEstado.ActualizarEstado(_tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, usuario);
+        return this;
     }
+
+    //Implementar try y catch acá o en consola principal
+    // hacemos throw excepcion dentro del validador o lo hacemos acá?
 }
+

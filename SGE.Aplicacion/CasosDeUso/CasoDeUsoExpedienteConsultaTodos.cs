@@ -5,7 +5,10 @@ public class CasoDeUsoExpedienteConsultaTodos(IExpedienteRepositorio expedienteR
     private readonly IExpedienteRepositorio _expedienteRepositorio = expedienteRepositorio;
     public List<Expediente> Ejecutar()
     {
-        return _expedienteRepositorio.ListarTodos();
+        List<Expediente>? lista = _expedienteRepositorio.ListarTodos();
+        if (lista == null || lista.Count == 0)
+            throw new RepositorioException("No hay expedientes para mostrar");
+        return lista;
 
     }
 

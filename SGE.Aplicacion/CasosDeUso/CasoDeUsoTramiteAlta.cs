@@ -1,39 +1,46 @@
-﻿namespace SGE.Aplicacion;
+﻿
+namespace SGE.Aplicacion;
 
-public class CasoDeUsoTramiteAlta(ITramiteRepositorio tramiteRepositorio, TramiteValidador tramiteValidador, ServicioAutorizacionProvisorio servicioAutorizacionProvisorio, ServicioActualizacionEstado servicioActualizacionEstado)
+public class CasoDeUsoTramiteAlta(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, ServicioAutorizacionProvisorio servicioAutorizacionProvisorio)
 {
-    public void Ejecutar(int idUsuario, Tramite tramite)
+    public CasoDeUsoTramiteAlta Ejecutar(int idUsuario, Tramite tramite)
     {
-        try
+        if (!servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.TramiteAlta))
         {
-            if (servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.TramiteAlta) && tramiteValidador.Validar(tramite, idUsuario))
-            {
-                tramite.FechaCreacion = DateTime.Now;
-                tramite.FechaUltModificacion = DateTime.Now;
-                tramite.UsuarioUltModificacion = idUsuario;
-                tramiteRepositorio.Alta(tramite);
-                servicioActualizacionEstado.ActualizarEstado(tramite.ExpedienteId, idUsuario);
-            }
+            throw new AutorizacionExcepcion("No posee el permiso");
         }
-        catch (Exception e)
+        if (!TramiteValidador.Validar(tramite, idUsuario))
         {
-            Console.WriteLine(e.Message);
+            throw new ValidacionException("No se pudo validar el trámite");
         }
 
-        //Cambio de estado
-        /*
-        Además, resultaría beneficioso desacoplar el servicio de la especificación que define qué cambio de estado
-        debe llevarse a cabo en función de la etiqueta del último trámite. Esta especificación podría ser
-        suministrada al servicio mediante la técnica de inyección de dependencias. 
+        tramite.FechaCreacion = DateTime.Now;
+        tramite.FechaUltModificacion = DateTime.Now;
+        tramite.UsuarioUltModificacion = idUsuario;
 
-        Preguntar si estaría bien llamar a ServicioActualizacionDeEstado que llame a EspecificacionCambioEstado que devuelva el estado nuevo del expediente, 
-        para eso llama a ITramiteRepositorio, que busca el ultimo trámite de dicho expediente 
-        ???????
-        */
+        tramiteRepositorio.Alta(tramite);
+        Console.WriteLine("añadió tramite");
+
+        ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, idUsuario);
+
+
+        return this;
+
+
     }
 
+    //Cambio de estado
+    /*
+    Además, resultaría beneficioso desacoplar el servicio de la especificación que define qué cambio de estado
+    debe llevarse a cabo en función de la etiqueta del último trámite. Esta especificación podría ser
+    suministrada al servicio mediante la técnica de inyección de dependencias. 
 
+    Preguntar si estaría bien llamar a ServicioActualizacionDeEstado que llame a EspecificacionCambioEstado que devuelva el estado nuevo del expediente, 
+    para eso llama a ITramiteRepositorio, que busca el ultimo trámite de dicho expediente 
+    ???????
+    */
 }
+
 
 
 

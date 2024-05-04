@@ -1,7 +1,8 @@
 ﻿namespace SGE.Aplicacion;
-public class EspecificacionCambioDeEstado()
+
+internal static class EspecificacionCambioDeEstado
 {
-    public EstadoExpediente buscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
+    internal static EstadoExpediente buscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
     {
         Tramite? tramiteAux = tramiteRepositorio.BuscarUltimo(ExpedienteId);
         if (tramiteAux != null)
@@ -18,7 +19,7 @@ public class EspecificacionCambioDeEstado()
         }
         else
         {
-            throw new RepositorioException("No se encontró el trámite");
+            throw new RepositorioException("No se encontró el trámite con ese numero de expediente");
 
         }
         return EstadoExpediente.ConResolución;

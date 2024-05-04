@@ -8,6 +8,7 @@ public class CasoDeUsoExpedienteConsultaPorId(IExpedienteRepositorio expedienteR
     {
         Expediente expediente = _expedienteRepositorio.BuscarPorId(id) ?? throw new RepositorioException("No se encontró el expediente");
         return expediente;
+
     }
 
 
