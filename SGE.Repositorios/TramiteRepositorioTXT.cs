@@ -45,37 +45,37 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         {
             int id = -1;
             int idExpediente = -1;
-            using StreamReader sr = new StreamReader(File.OpenRead(NombreArch));
             {
-                File.Create(NombreArchAux);
-                using StreamWriter sw = new StreamWriter(NombreArchAux);
-                {
-                    while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idTramite)
-                    {
-                        if (id != idTramite)
-                        {
-                            sw.WriteLine(id);
-                            idExpediente = int.Parse(sr.ReadLine() ?? "");
-                            sw.WriteLine(idExpediente);
-                            sw.WriteLine(sr.ReadLine() ?? "");
-                            sw.WriteLine(sr.ReadLine() ?? "");
-                            sw.WriteLine(sr.ReadLine() ?? "");
-                            sw.WriteLine(sr.ReadLine() ?? "");
-                        }
-                    }
-                    if (!sr.EndOfStream)
-                    {
-                        sr.ReadLine();
-                        sr.ReadLine();
-                        sr.ReadLine();
-                        sr.ReadLine();
-                        sr.ReadLine();
-                        sw.WriteLine(sr.ReadToEnd());
-                    }
+                StreamReader sr = new(NombreArch);
 
+                File.Create(NombreArchAux);
+                StreamWriter sw = new(NombreArchAux);
+                while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idTramite)
+                {
+                    if (id != idTramite)
+                    {
+                        sw.WriteLine(id);
+                        idExpediente = int.Parse(sr.ReadLine() ?? "");
+                        sw.WriteLine(idExpediente);
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                    }
                 }
+                if (!sr.EndOfStream)
+                {
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sw.WriteLine(sr.ReadToEnd());
+                }
+                sr.Close();
+                sw.Close();
             }
-            if (!sr.EndOfStream && id == idTramite)
+            if (id == idTramite)
             {
                 File.Move(NombreArchAux, NombreArch, true);
                 return id;
