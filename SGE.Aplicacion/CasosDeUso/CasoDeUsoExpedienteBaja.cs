@@ -7,12 +7,12 @@ public class CasoDeUsoExpedienteBaja(IExpedienteRepositorio repositorio, ITramit
     private readonly ITramiteRepositorio _tramiteRepositorio = tramiteRepositorio;
     public CasoDeUsoExpedienteBaja Ejecutar(int idUsuario, int idExpediente, params Permiso[] permisos)
     {
-        if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
+        if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja, Permiso.TramiteBaja))
         {
             throw new AutorizacionExcepcion("No posee el permiso");
         }
-        _expedienteRepositorio.Baja(idExpediente);
-        _tramiteRepositorio.BorrarTodosDeIdExpediente(idExpediente);
+        if (!_expedienteRepositorio.Baja(idExpediente))
+            _tramiteRepositorio.BorrarTodosDeIdExpediente(idExpediente);
         return this;
     }
 

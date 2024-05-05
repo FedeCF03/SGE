@@ -96,29 +96,29 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         {
             int id = -1;
             File.Create(NombreArchAux);
-            using StreamReader sr = new(File.OpenRead(NombreArch));
-            using StreamWriter sw = new(NombreArchAux);
-
-            while (!sr.EndOfStream)
             {
-                id = int.Parse(sr.ReadLine() ?? "-1");
-                if (id != expedienteId)
+                using StreamReader sr = new(File.OpenRead(NombreArch));
+                using StreamWriter sw = new(NombreArchAux);
+
+                while (!sr.EndOfStream)
                 {
-                    sw.WriteLine(id);
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                }
-                else
-                {
-                    for (int i = 0; i < 5; i++)
-                        sr.ReadLine();
+                    id = int.Parse(sr.ReadLine() ?? "-1");
+                    if (id != expedienteId)
+                    {
+                        sw.WriteLine(id);
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                    }
+                    else
+                    {
+                        for (int i = 0; i < 5; i++)
+                            sr.ReadLine();
+                    }
                 }
             }
-            sw.Close();
-            sr.Close();
             if (id == expedienteId)
                 File.Move(NombreArchAux, NombreArch, true);
         }
@@ -251,10 +251,9 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
 
     }
     //Modifica el trámite en el archivo de texto y devuelve la etiqueta del trámite antes de ser modificado
-    public bool Modificar(Tramite tramite, out EtiquetaTramite? etiquetaVieja)
+    public bool Modificar(Tramite tramite)
     {
         int id = -1;
-        etiquetaVieja = null;
         try
         {
             //Funciona así el alcanze del using?
@@ -269,23 +268,21 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                     sw.WriteLine(sr.ReadLine() ?? "");
                     sw.WriteLine(sr.ReadLine() ?? "");
                     sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
                 }
                 if (id == tramite.Id)
                 {
                     sw.WriteLine(id);
-                    sr.ReadLine();
-                    etiquetaVieja = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
-                    sr.ReadLine();
-                    sr.ReadLine();
-                    sr.ReadLine();
-                    sr.ReadLine();
                     sw.WriteLine(tramite.ExpedienteId);
                     sw.WriteLine(tramite.Etiqueta);
                     sw.WriteLine(tramite.Contenido);
                     sw.WriteLine(tramite.FechaCreacion);
                     sw.WriteLine(tramite.FechaUltModificacion);
                     sw.WriteLine(tramite.UsuarioUltModificacion);
-                    sw.WriteLine(sr.ReadToEnd());
+
+                    for (int i = 0; i < 7; i++)
+                        sr.ReadLine();
+                    sw.Write(sr.ReadToEnd());
                 }
             }
 
@@ -301,7 +298,6 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-            etiquetaVieja = null;
             return false;
 
         }
@@ -339,7 +335,6 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                 }
 
             }
-            Console.WriteLine("resultado.Id: " + resultado.Id);
             if (resultado.Id != -1)
                 return resultado;
             return null;
@@ -350,4 +345,6 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
             return null;
         }
     }
+
+
 }

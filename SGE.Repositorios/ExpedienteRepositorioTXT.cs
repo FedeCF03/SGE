@@ -276,7 +276,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
                 using StreamWriter sw = new(NombreArchAux);
                 using StreamReader sr = new(NombreArch);
                 Console.WriteLine("asd");
-                while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
+                while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "-1")) != idExpediente)
                 {
                     sw.WriteLine(id);
                     sw.WriteLine(sr.ReadLine() ?? "");
@@ -290,14 +290,14 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
                     sw.WriteLine(id);
                     sw.WriteLine(sr.ReadLine() ?? "");
                     sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(DateTime.Now.ToString());
+                    sw.WriteLine(DateTime.Now);
                     sw.WriteLine(idUsuario);
                     sw.WriteLine(estado);
                     sr.ReadLine();
                     sr.ReadLine();
                     sr.ReadLine();
                     Console.WriteLine("asd");
-                    sw.WriteLine(sr.ReadToEnd());
+                    sw.Write(sr.ReadToEnd());
                 }
             }
 

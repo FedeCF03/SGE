@@ -1,6 +1,6 @@
 ﻿namespace SGE.Aplicacion;
 
-public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, ServicioAutorizacionProvisorio servicio)
+public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, ServicioAutorizacionProvisorio servicio)
 {
     private readonly ITramiteRepositorio _tramiteRepositorio = tramiteRepositorio;
     private readonly ServicioAutorizacionProvisorio _servicio = servicio;
@@ -13,7 +13,7 @@ public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio
         if (!TramiteValidador.Validar(tramite, usuario))
             throw new ValidacionException("No se pudo validar el expediente");
 
-        if (!_tramiteRepositorio.Modificar(tramite, out EtiquetaTramite? etiquetaVieja))
+        if (!_tramiteRepositorio.Modificar(tramite))
             throw new RepositorioException("No se encontró un trámite con ese ID");
 
         return this;

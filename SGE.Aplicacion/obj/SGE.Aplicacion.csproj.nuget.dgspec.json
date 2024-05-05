@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {}
+    "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {}
   },
   "projects": {
-    "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {
+    "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj",
+        "projectUniqueName": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj",
         "projectName": "SGE.Aplicacion",
-        "projectPath": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj",
+        "projectPath": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj",
         "packagesPath": "C:\\Users\\fedec\\.nuget\\packages\\",
-        "outputPath": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\obj\\",
+        "outputPath": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\fedec\\AppData\\Roaming\\NuGet\\NuGet.Config"

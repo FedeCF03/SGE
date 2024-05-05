@@ -21,7 +21,10 @@ public class CasoDeUsoTramiteAlta(ITramiteRepositorio tramiteRepositorio, IExped
         tramiteRepositorio.Alta(tramite);
         Console.WriteLine("añadió tramite");
 
-        ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, idUsuario);
+        if (!ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, idUsuario))
+        {
+            throw new RepositorioException("No hay un expediente asociado al trámite.");
+        }
 
 
         return this;
