@@ -12,7 +12,7 @@ public interface IExpedienteRepositorio
     public List<Expediente>? ListarTodos();
 
     public List<Expediente>? ListarPorEstado(EstadoExpediente estado);
-    public void ActualizarEstado(int idUsuario, int idExpediente, EstadoExpediente estado);
+    public bool ActualizarEstado(int idUsuario, int idExpediente, EstadoExpediente? estado);
     public int DevolverIdInc();
 
 }

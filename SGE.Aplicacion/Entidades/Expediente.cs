@@ -40,10 +40,6 @@ public class Expediente
     public int UsuarioUltModificacion { get; set; }
     public EstadoExpediente Estado { get; set; }
 
-    public Expediente(int idUsuario)
-    {
-        UsuarioUltModificacion = idUsuario;
-    }
     public Expediente() { }
 
     public Expediente(string caratula, int idUsuario, EstadoExpediente estado)

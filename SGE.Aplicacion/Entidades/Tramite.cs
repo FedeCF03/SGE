@@ -65,14 +65,19 @@ public class Tramite
 
     }
 
-    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion) : this(expedienteId, EtiquetaTramite.PaseAlArchivo, contenido, usuarioUltModificacion)
+    // public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, DateTime fechaCreacion, DateTime fechaUltModificacion, int usuarioUltModificacion) : this(expedienteId, EtiquetaTramite.PaseAlArchivo, contenido, usuarioUltModificacion)
+    // {
+    //     Id = id;
+    //     FechaCreacion = fechaCreacion;
+    //     FechaUltModificacion = fechaUltModificacion;
+
+    // }
+
+    //Constructor sin fechas 
+    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, int idUsuario) : this(expedienteId, etiqueta, contenido, idUsuario)
     {
         Id = id;
-        FechaCreacion = fechaCreacion;
-        FechaUltModificacion = fechaUltModificacion;
-
     }
-
 
 }
 

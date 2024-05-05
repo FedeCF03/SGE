@@ -7,17 +7,15 @@ public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio
 
     public CasoDeUsoTramiteModificacion Ejecutar(int usuario, Tramite tramite)
     {
-        if (_servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion))
-        {
+        if (!_servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion))
             throw new AutorizacionExcepcion("No posee el permiso");
-        }
-        if (!TramiteValidador.Validar(tramite, usuario))
-        {
-            throw new ValidacionException("No se pudo validar el expediente");
-        }
 
-        _tramiteRepositorio.Modificar(tramite);
-        ServicioActualizacionEstado.ActualizarEstado(_tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, usuario);
+        if (!TramiteValidador.Validar(tramite, usuario))
+            throw new ValidacionException("No se pudo validar el expediente");
+
+        if (!_tramiteRepositorio.Modificar(tramite, out EtiquetaTramite? etiquetaVieja))
+            throw new RepositorioException("No se encontró un trámite con ese ID");
+
         return this;
     }
 

@@ -32,11 +32,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Repositorios\\SGE.Repositorios.csproj",
+      "projectUniqueName": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Repositorios\\SGE.Repositorios.csproj",
       "projectName": "SGE.Repositorios",
-      "projectPath": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Repositorios\\SGE.Repositorios.csproj",
+      "projectPath": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Repositorios\\SGE.Repositorios.csproj",
       "packagesPath": "C:\\Users\\fedec\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Repositorios\\obj\\",
+      "outputPath": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Repositorios\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\fedec\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -51,8 +51,8 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "projectReferences": {
-            "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {
-              "projectPath": "C:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj"
+            "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj": {
+              "projectPath": "c:\\Users\\fedec\\Downloads\\SGE\\SGE.Aplicacion\\SGE.Aplicacion.csproj"
             }
           }
         }

@@ -6,8 +6,10 @@ internal static class ServicioActualizacionEstado
     {
         try
         {
-            EstadoExpediente estado = EspecificacionCambioDeEstado.buscarEstado(ExpedienteId, tramiteRepositorio);
-            expedienteRepositorio.ActualizarEstado(idUsuario, ExpedienteId, estado);
+            Console.WriteLine("Actualizando estado del expediente");
+            EstadoExpediente? estado = EspecificacionCambioDeEstado.buscarEstado(ExpedienteId, tramiteRepositorio);
+            if (estado != null)
+                Console.WriteLine(expedienteRepositorio.ActualizarEstado(idUsuario, ExpedienteId, (EstadoExpediente)estado));
         }
         catch (Exception e)
         {

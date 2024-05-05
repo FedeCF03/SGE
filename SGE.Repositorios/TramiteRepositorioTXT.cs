@@ -101,7 +101,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
 
             while (!sr.EndOfStream)
             {
-                id = int.Parse(sr.ReadLine() ?? "");
+                id = int.Parse(sr.ReadLine() ?? "-1");
                 if (id != expedienteId)
                 {
                     sw.WriteLine(id);
@@ -136,7 +136,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         try
         {
             using StreamReader sr = new(NombreArch);
-            while (!sr.EndOfStream && ((auxiliar.Id = int.Parse(sr.ReadLine() ?? "")) != idTramite))
+            while (!sr.EndOfStream && ((auxiliar.Id = int.Parse(sr.ReadLine() ?? "-1")) != idTramite))
             {
                 for (int i = 0; i < 6; i++)
                     sr.ReadLine();
@@ -195,7 +195,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
             {
                 Tramite auxiliar = new Tramite()
                 {
-                    Id = int.Parse(sr.ReadLine() ?? ""),
+                    Id = int.Parse(sr.ReadLine() ?? "-1"),
                     ExpedienteId = int.Parse(sr.ReadLine() ?? ""),
                     Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? ""),
                     Contenido = sr.ReadLine(),
@@ -250,29 +250,61 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
 
 
     }
-
-    public bool Modificar(Tramite tramite)
+    //Modifica el trámite en el archivo de texto y devuelve la etiqueta del trámite antes de ser modificado
+    public bool Modificar(Tramite tramite, out EtiquetaTramite? etiquetaVieja)
     {
-        int n = 0;
-        using StreamReader sr = new(NombreArch);
-        using StreamWriter sw = new(NombreArch);
-        while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != tramite.Id)
+        int id = -1;
+        etiquetaVieja = null;
+        try
         {
-            for (int i = 0; i < 6; i++)
-                sr.ReadLine();
-        }
+            //Funciona así el alcanze del using?
+            {
+                using StreamWriter sw = new(NombreArchAux);
+                using StreamReader sr = new(NombreArch);
+                while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != tramite.Id)
+                {
+                    sw.WriteLine(id);
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                }
+                if (id == tramite.Id)
+                {
+                    sw.WriteLine(id);
+                    sr.ReadLine();
+                    etiquetaVieja = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sw.WriteLine(tramite.ExpedienteId);
+                    sw.WriteLine(tramite.Etiqueta);
+                    sw.WriteLine(tramite.Contenido);
+                    sw.WriteLine(tramite.FechaCreacion);
+                    sw.WriteLine(tramite.FechaUltModificacion);
+                    sw.WriteLine(tramite.UsuarioUltModificacion);
+                    sw.WriteLine(sr.ReadToEnd());
+                }
+            }
 
-        if (n == tramite.Id)
-        {
-            sw.WriteLine(tramite.ExpedienteId);
-            sw.WriteLine(tramite.Etiqueta);
-            sw.WriteLine(tramite.Contenido);
-            sw.WriteLine(tramite.FechaCreacion);
-            sw.WriteLine(tramite.FechaUltModificacion);
-            sw.WriteLine(tramite.UsuarioUltModificacion);
-            return true;
+            if (id == tramite.Id)
+                File.Move(NombreArchAux, NombreArch, true);
+            else
+                File.Delete(NombreArchAux);
+
+            return id == tramite.Id;
+
+
         }
-        return false;
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            etiquetaVieja = null;
+            return false;
+
+        }
 
 
     }
@@ -280,23 +312,25 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
 
     public Tramite? BuscarUltimo(int idExpediente)
     {
-        Tramite auxiliar = new Tramite();
+        Tramite resultado = new() { Id = -1 };
+        Tramite auxiliar = new();
         try
         {
-            using var sr = new StreamReader(File.OpenRead(NombreArch));
+            using var sr = new StreamReader(NombreArch);
             while (!sr.EndOfStream)
             {
                 auxiliar.Id = int.Parse(sr.ReadLine() ?? "");
                 auxiliar.ExpedienteId = int.Parse(sr.ReadLine() ?? "");
                 if (auxiliar.ExpedienteId == idExpediente)
                 {
-                    auxiliar.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
-                    auxiliar.Contenido = sr.ReadLine() ?? "";
-                    auxiliar.FechaCreacion = DateTime.Parse(sr.ReadLine() ?? "");
-                    auxiliar.FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
-                    auxiliar.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+                    resultado.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
+                    resultado.Contenido = sr.ReadLine() ?? "";
+                    resultado.FechaCreacion = DateTime.Parse(sr.ReadLine() ?? "");
+                    resultado.FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
+                    resultado.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+                    resultado.ExpedienteId = auxiliar.ExpedienteId;
+                    resultado.Id = auxiliar.Id;
                     Console.WriteLine("tramite encontrado");
-
                 }
                 else
                 {
@@ -305,8 +339,9 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                 }
 
             }
-            if (auxiliar.ExpedienteId == idExpediente)
-                return auxiliar;
+            Console.WriteLine("resultado.Id: " + resultado.Id);
+            if (resultado.Id != -1)
+                return resultado;
             return null;
         }
         catch (Exception e)

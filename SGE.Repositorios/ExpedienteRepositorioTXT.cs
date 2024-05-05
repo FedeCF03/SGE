@@ -23,18 +23,22 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     readonly string NombreIds = "idExpedientes.txt";
 
     readonly string NombreArch = "expediente.txt";
+    readonly string NombreArchAux = "expedienteAux.txt";
 
 
     public ExpedienteRepositorioTXT()
     {
+
         if (!File.Exists(NombreArch))
         {
-            File.Create(NombreArch);
+            using var sw = new StreamWriter(NombreArch);
         }
-        if (!File.Exists(NombreIds))
         {
-            using var sw = new StreamWriter(NombreIds);
-            sw.WriteLine(1);
+            if (!File.Exists(NombreIds))
+            {
+                using var sw = new StreamWriter(NombreIds);
+                sw.WriteLine(1);
+            }
         }
     }
 
@@ -62,42 +66,42 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     {
         try
         {
-            string NombreArchAux = "auxiliar.txt";
-            File.Create(NombreArchAux);
-            using StreamWriter sw = new(NombreArchAux);
-            using StreamReader sr = new(File.OpenRead(NombreArch));
-
             int id = -1;
-            while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
+
             {
-                if (id != idExpediente)
+                using StreamWriter sw = new(NombreArchAux);
+                using StreamReader sr = new(NombreArch);
+                while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
                 {
-                    sw.WriteLine(id);
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
-                    sw.WriteLine(sr.ReadLine() ?? "");
+                    if (id != idExpediente)
+                    {
+                        sw.WriteLine(id);
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                    }
+                }
+                if (id == idExpediente)
+                {
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sw.WriteLine(sr.ReadToEnd());
                 }
             }
-            if (!sr.EndOfStream)
-            {
-                sr.ReadLine();
-                sr.ReadLine();
-                sr.ReadLine();
-                sr.ReadLine();
-                sr.ReadLine();
-                sw.WriteLine(sr.ReadToEnd());
-            }
-            sw.Close();
-            sr.Close();
+
             if (id == idExpediente)
                 File.Move(NombreArchAux, NombreArch, true);
             return id == idExpediente;
+
+
         }
         catch (Exception e)
         {
-
             Console.WriteLine(e.Message);
             return false;
         }
@@ -139,11 +143,11 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             while (!sr.EndOfStream)
             {
                 Expediente auxiliar = new Expediente(
-                    int.Parse(sr.ReadLine() ?? ""),
+                    int.Parse(sr.ReadLine() ?? "-1"),
                     sr.ReadLine() ?? "",
                     DateTime.Parse(sr.ReadLine() ?? ""),
                     DateTime.Parse(sr.ReadLine() ?? ""),
-                    int.Parse(sr.ReadLine() ?? ""),
+                    int.Parse(sr.ReadLine() ?? "-1"),
                     (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "")
                 );
                 listaRetornar.Add(auxiliar);
@@ -211,83 +215,109 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     }
     public bool Modificacion(int idUsuario, Expediente expediente)
     {
-        //hay que pasar todo el expediente o solo los campos el estado?
-        //suponemos que esta entero 7u7
-
-        long pos = -1;
-        int n = -1;
-        using var sr = new StreamReader(File.OpenRead(NombreArch));
-        {
-            Console.WriteLine(sr.BaseStream.Length.ToString());
-            while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != expediente.Id)
-            {
-                for (int i = 0; i < 5; i++)
-                    sr.ReadLine();
-            }
-
-            // como hacer el pos ??? nos pone null
-        }
-        if (n != expediente.Id)
-            return false;
-        Console.WriteLine("Expediente encontrado");
-        pos = sr.BaseStream.Position;
-        sr.Close();
-
-        using StreamWriter sw = new(NombreArch, true);
-        Console.WriteLine(n + " " + expediente.Id);
-        Console.WriteLine("Expediente encontrado");
-        Console.WriteLine("Posicion: " + pos);
-
-        sw.BaseStream.Position = pos;
-        sw.WriteLine(expediente.Id.ToString());
-        sw.WriteLine(expediente.Caratula);
-        sw.WriteLine(expediente.FechaCreacion);
-        sw.WriteLine(expediente.FechaUltModificacion);
-        sw.WriteLine(expediente.UsuarioUltModificacion);
-        sw.WriteLine(expediente.Estado);
-        return true;
-
-
-    }
-    public void ActualizarEstado(int idUsuario, int idExpediente, EstadoExpediente estado)
-    {
         try
         {
-            int n = -1;
-            long pos = 0;
-            using (StreamReader sr = new(NombreArch))
+            int id = -1;
+            //Funciona así el alcanze del using?
             {
-                while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
+                using StreamWriter sw = new(NombreArchAux);
+                using StreamReader sr = new(NombreArch);
+
+                while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != expediente.Id)
                 {
-                    for (int i = 0; i < 5; i++)
+                    sw.WriteLine(id);
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                }
+                if (id == expediente.Id)
+                {
+                    sw.WriteLine(id);
+                    sw.WriteLine(expediente.Caratula);
+                    sw.WriteLine(expediente.FechaCreacion);
+                    sw.WriteLine(DateTime.Now);
+                    sw.WriteLine(idUsuario);
+                    sw.WriteLine(expediente.Estado);
+
+                    for (int i = 0; i < 6; i++)
                         sr.ReadLine();
-                }
 
-                if (n == idExpediente)
-                {
-                    sr.ReadLine();
-                    sr.ReadLine();
-                    pos = sr.BaseStream.Position;
-                    sr.Close();
+                    sw.WriteLine(sr.ReadToEnd());
                 }
-                Console.WriteLine("expediente encontrado");
+            }
 
-            }
-            if (n == idExpediente)
-            {
-                using StreamWriter sw = new(NombreArch);
-                sw.BaseStream.Seek(pos, SeekOrigin.Begin);
-                sw.WriteLine(DateTime.Now.ToString());
-                sw.WriteLine(idUsuario);
-                sw.WriteLine(estado);
-            }
+            if (id == expediente.Id)
+                File.Move(NombreArchAux, NombreArch, true);
+            else
+                File.Delete(NombreArchAux);
+            return id == expediente.Id;
+
+
+
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
-        }
-    }
-}
+            return false;
 
+        }
+
+    }
+
+    public bool ActualizarEstado(int idUsuario, int idExpediente, EstadoExpediente? estado)
+    {
+        try
+        {
+            int id = -1;
+            //Funciona así el alcanze del using?
+            {
+                using StreamWriter sw = new(NombreArchAux);
+                using StreamReader sr = new(NombreArch);
+                Console.WriteLine("asd");
+                while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
+                {
+                    sw.WriteLine(id);
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                }
+                if (id == idExpediente)
+                {
+                    sw.WriteLine(id);
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(DateTime.Now.ToString());
+                    sw.WriteLine(idUsuario);
+                    sw.WriteLine(estado);
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    sr.ReadLine();
+                    Console.WriteLine("asd");
+                    sw.WriteLine(sr.ReadToEnd());
+                }
+            }
+
+            if (id == idExpediente)
+                File.Move(NombreArchAux, NombreArch, true);
+            else
+                File.Delete(NombreArchAux);
+            return id == idExpediente;
+
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return false;
+
+        }
+
+    }
+
+}
 
 // Path: SGE.Repositorios/UsuarioRepositorioTXT.cs

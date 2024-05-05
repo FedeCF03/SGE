@@ -2,7 +2,7 @@
 
 internal static class EspecificacionCambioDeEstado
 {
-    internal static EstadoExpediente buscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
+    internal static EstadoExpediente? buscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
     {
         Tramite? tramiteAux = tramiteRepositorio.BuscarUltimo(ExpedienteId);
         if (tramiteAux != null)
@@ -15,6 +15,8 @@ internal static class EspecificacionCambioDeEstado
                     return EstadoExpediente.ParaResolver;
                 case EtiquetaTramite.PaseAlArchivo:
                     return EstadoExpediente.Finalizado;
+                default:
+                    return null;
             }
         }
         else
@@ -22,7 +24,6 @@ internal static class EspecificacionCambioDeEstado
             throw new RepositorioException("No se encontró el trámite con ese numero de expediente");
 
         }
-        return EstadoExpediente.ConResolución;
 
 
     }
