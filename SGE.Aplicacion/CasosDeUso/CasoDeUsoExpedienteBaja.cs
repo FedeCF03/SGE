@@ -11,8 +11,13 @@ public class CasoDeUsoExpedienteBaja(IExpedienteRepositorio repositorio, ITramit
         {
             throw new AutorizacionExcepcion("No posee el permiso");
         }
-        if (!_expedienteRepositorio.Baja(idExpediente))
-            _tramiteRepositorio.BorrarTodosDeIdExpediente(idExpediente);
+        if (_expedienteRepositorio.Baja(idExpediente))
+        {
+            if (!_tramiteRepositorio.BorrarTodosDeIdExpediente(idExpediente))
+                throw new RepositorioException("Hubo un error en el borrado de los trámites asociados al expediente");
+        }
+        else
+            throw new RepositorioException("No existe un expediente con ese ID");
         return this;
     }
 

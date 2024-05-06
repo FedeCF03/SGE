@@ -73,15 +73,13 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
                 using StreamReader sr = new(NombreArch);
                 while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
                 {
-                    if (id != idExpediente)
-                    {
-                        sw.WriteLine(id);
-                        sw.WriteLine(sr.ReadLine() ?? "");
-                        sw.WriteLine(sr.ReadLine() ?? "");
-                        sw.WriteLine(sr.ReadLine() ?? "");
-                        sw.WriteLine(sr.ReadLine() ?? "");
-                        sw.WriteLine(sr.ReadLine() ?? "");
-                    }
+                    sw.WriteLine(id);
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+                    sw.WriteLine(sr.ReadLine() ?? "");
+
                 }
                 if (id == idExpediente)
                 {
@@ -90,12 +88,13 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
                     sr.ReadLine();
                     sr.ReadLine();
                     sr.ReadLine();
-                    sw.WriteLine(sr.ReadToEnd());
+                    sw.Write(sr.ReadToEnd());
                 }
             }
 
             if (id == idExpediente)
                 File.Move(NombreArchAux, NombreArch, true);
+            else File.Delete(NombreArchAux);
             return id == idExpediente;
 
 
@@ -244,7 +243,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
                     for (int i = 0; i < 6; i++)
                         sr.ReadLine();
 
-                    sw.WriteLine(sr.ReadToEnd());
+                    sw.Write(sr.ReadToEnd());
                 }
             }
 

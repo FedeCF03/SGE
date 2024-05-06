@@ -6,7 +6,13 @@ public class CasoDeUsoExpedienteConsultaPorId(IExpedienteRepositorio expedienteR
 
     public Expediente Ejecutar(int id)
     {
-        Expediente expediente = _expedienteRepositorio.BuscarPorId(id) ?? throw new RepositorioException("No se encontró el expediente");
+
+        Expediente? expediente = _expedienteRepositorio.BuscarPorId(id);
+        if (expediente == null)
+        {
+            throw new RepositorioException("No se encontró el expediente");
+        }
+
         return expediente;
 
     }

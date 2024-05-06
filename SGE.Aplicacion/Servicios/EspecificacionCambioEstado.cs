@@ -2,7 +2,7 @@
 
 internal static class EspecificacionCambioDeEstado
 {
-    internal static EstadoExpediente? buscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
+    internal static EstadoExpediente? BuscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
     {
         Tramite? tramiteAux = tramiteRepositorio.BuscarUltimo(ExpedienteId);
         if (tramiteAux != null)

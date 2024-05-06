@@ -16,7 +16,8 @@ public class CasoDeUsoTramiteBaja(ITramiteRepositorio tramiteRepositorio, IExped
         {
             throw new RepositorioException("El trámite no tiene asignado ningún expediente");
         }
-        ServicioActualizacionEstado.ActualizarEstado(_tramiteRepositorio, _expedienteRepositorio, idExpediente, usuario);
+        if (!ServicioActualizacionEstado.ActualizarEstado(_tramiteRepositorio, _expedienteRepositorio, idExpediente, usuario))
+            throw new RepositorioException("No hay un expediente asociado al trámite");
 
         return this;
     }

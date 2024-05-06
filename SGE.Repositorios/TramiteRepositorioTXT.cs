@@ -1,6 +1,7 @@
 namespace SGE.Repositorios;
 
 using System.Collections.Generic;
+using System.Data;
 using SGE.Aplicacion;
 
 public class TramiteRepositorioTXT : ITramiteRepositorio
@@ -45,40 +46,41 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         {
             int id = -1;
             int idExpediente = -1;
-            {
-                StreamReader sr = new(NombreArch);
 
-                File.Create(NombreArchAux);
-                StreamWriter sw = new(NombreArchAux);
+            {
+                using StreamReader sr = new(NombreArch);
+                using StreamWriter sw = new(NombreArchAux);
                 while (!sr.EndOfStream && (id = int.Parse(sr.ReadLine() ?? "")) != idTramite)
                 {
                     if (id != idTramite)
                     {
                         sw.WriteLine(id);
-                        idExpediente = int.Parse(sr.ReadLine() ?? "");
-                        sw.WriteLine(idExpediente);
                         sw.WriteLine(sr.ReadLine() ?? "");
                         sw.WriteLine(sr.ReadLine() ?? "");
                         sw.WriteLine(sr.ReadLine() ?? "");
                         sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+                        sw.WriteLine(sr.ReadLine() ?? "");
+
                     }
                 }
                 if (!sr.EndOfStream)
                 {
+                    idExpediente = int.Parse(sr.ReadLine() ?? "");
                     sr.ReadLine();
                     sr.ReadLine();
                     sr.ReadLine();
                     sr.ReadLine();
                     sr.ReadLine();
-                    sw.WriteLine(sr.ReadToEnd());
+                    sw.Write(sr.ReadToEnd());
                 }
-                sr.Close();
-                sw.Close();
             }
+
             if (id == idTramite)
             {
+                Console.WriteLine(idExpediente);
                 File.Move(NombreArchAux, NombreArch, true);
-                return id;
+                return idExpediente;
             }
             else
                 return -1;
@@ -90,12 +92,12 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
             return -1;
         }
     }
-    public void BorrarTodosDeIdExpediente(int expedienteId)
+    public bool BorrarTodosDeIdExpediente(int expedienteId)
     {
         try
         {
-            int id = -1;
-            File.Create(NombreArchAux);
+            int idExp;
+            int id;
             {
                 using StreamReader sr = new(File.OpenRead(NombreArch));
                 using StreamWriter sw = new(NombreArchAux);
@@ -103,9 +105,11 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                 while (!sr.EndOfStream)
                 {
                     id = int.Parse(sr.ReadLine() ?? "-1");
-                    if (id != expedienteId)
+                    idExp = int.Parse(sr.ReadLine() ?? "-1");
+                    if (idExp != expedienteId)
                     {
                         sw.WriteLine(id);
+                        sw.WriteLine(idExp);
                         sw.WriteLine(sr.ReadLine() ?? "");
                         sw.WriteLine(sr.ReadLine() ?? "");
                         sw.WriteLine(sr.ReadLine() ?? "");
@@ -119,13 +123,14 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                     }
                 }
             }
-            if (id == expedienteId)
-                File.Move(NombreArchAux, NombreArch, true);
+            File.Move(NombreArchAux, NombreArch, true);
+            return true;
         }
         catch (Exception e)
         {
-
+            Console.WriteLine("Hubo un en mi");
             Console.WriteLine(e.Message);
+            return false;
         }
     }
 

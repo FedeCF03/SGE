@@ -1,12 +1,11 @@
 ﻿namespace SGE.Aplicacion;
-
 internal static class ServicioActualizacionEstado
 {
     internal static bool ActualizarEstado(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, int ExpedienteId, int idUsuario)
     {
         try
         {
-            EstadoExpediente? estado = EspecificacionCambioDeEstado.buscarEstado(ExpedienteId, tramiteRepositorio);
+            EstadoExpediente? estado = EspecificacionCambioDeEstado.BuscarEstado(ExpedienteId, tramiteRepositorio);
             if (estado != null)
                 if (expedienteRepositorio.ActualizarEstado(idUsuario, ExpedienteId, (EstadoExpediente)estado))
                     return true;

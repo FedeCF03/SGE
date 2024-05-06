@@ -48,7 +48,10 @@ public class Expediente
         UsuarioUltModificacion = idUsuario;
         Estado = estado;
     }
-
+    public Expediente(int id, string caratula, int idUsuario, EstadoExpediente estado) : this(caratula, idUsuario, estado)
+    {
+        Id = id;
+    }
     public Expediente(int id, string caratula, DateTime fechaCreacion, DateTime fechaUltModificacin, int idUsuario, EstadoExpediente estado) : this(caratula, idUsuario, estado)
     {
         Id = id;

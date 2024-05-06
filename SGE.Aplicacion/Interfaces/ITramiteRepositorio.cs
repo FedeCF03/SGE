@@ -4,7 +4,7 @@ public interface ITramiteRepositorio
 {
     void Alta(Tramite tramite);
     int Baja(int idTramite);
-    void BorrarTodosDeIdExpediente(int idExpediente);
+    bool BorrarTodosDeIdExpediente(int idExpediente);
     //No se puede modificar el id del tramite, asumimos que el id no se modifica en tramite
     bool Modificar(Tramite tramite);
 
