@@ -1,11 +1,13 @@
-﻿using SGE.Aplicacion;
+﻿using System.Collections;
+using System.Diagnostics;
+using SGE.Aplicacion;
 using SGE.Repositorios;
 /*
 que hacer cuando se borran todos los tramites asociados a un expediente
 Que hacer si catchea una excepcion de entrada salida
 Funciona así el alcanze del using?
 clases abstractas?
-
+actualizacion de estado de expediente cuando hacemos alta de expediente
 // tramite caso alto andando 10 puntitosss
 //tramite modificacion andando 10 puntitosss
 //tramite consulta etiqueta andando 10 puntitosss
@@ -14,25 +16,133 @@ expediente alta andando 10 puntitosss
 expediente baja andando 10 puntitosss
 expediente consulta por id andando 10 puntitosss
 expediente consulta todos andando 10 puntitosss
-
-
+esta bien usar try catch en servicio actualizacion estado?
+q hacer con los permisos
 
 */
-Expediente expediente1 = new("HOLA MUNDODODODODODO", 1, EstadoExpediente.Finalizado) { Id = 15 };
-Expediente expediente2 = new(1, "123321", 1, EstadoExpediente.ReciénIniciado);
-Expediente expediente3 = new("54645756", 1, EstadoExpediente.ReciénIniciado);
-Expediente expediente4 = new("feded6785878saasd", 1, EstadoExpediente.ReciénIniciado);
-Expediente expediente5 = new("567657567", 1, EstadoExpediente.ReciénIniciado);
-Expediente expediente6 = new("fed65735edsaasd", 1, EstadoExpediente.ReciénIniciado);
-Expediente expediente7 = new("otmotmotmotmtitomitmotim", 1, EstadoExpediente.ReciénIniciado);
-Expediente expediente8 = new("345", 1, EstadoExpediente.ReciénIniciado);
-Tramite tramite1 = new(18, EtiquetaTramite.PaseAlArchivo, "contenido1", 1);
-Tramite tramite2 = new(7, 16, EtiquetaTramite.PaseAlArchivo, "contenidoTomi", 69);
-Tramite tramite3 = new(22, EtiquetaTramite.Resolución, "contenido3", 1);
-Tramite tramite4 = new(21, EtiquetaTramite.PaseAlArchivo, "contenido4", 1);
-//CasoDeUsoTramiteAlta casoDeUsoTramiteAlta = new(new TramiteRepositorioTXT(), new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
-//casoDeUsoTramiteAlta.Ejecutar(1, tramite1);
-//CasoDeUsoExpedienteBaja casoDeUsoExpedienteBaja = new(new ExpedienteRepositorioTXT(), new TramiteRepositorioTXT(), new ServicioAutorizacionProvisorio());
-//casoDeUsoExpedienteBaja.Ejecutar(1, 17);
-CasoDeUsoExpedienteModificacion casoDeUsoExpedienteConsultaTodos = new(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
-casoDeUsoExpedienteConsultaTodos.Ejecutar(1, expediente1);
+Console.WriteLine("Precione una tecla para continuar...");
+Console.ReadKey();
+
+Console.WriteLine("Para opciones de expediente, presione 1 ");
+Console.WriteLine("Para opciones de trámite, presione 2 ");
+int i = int.Parse(Console.ReadLine() ?? "");
+if (i == 1)
+{
+    Console.WriteLine("Para dar de alta un expediente, presione 1 ");
+    Console.WriteLine("Para dar de baja un expediente, presione 2 ");
+    Console.WriteLine("Para consultar un expediente por id, presione 3 ");
+    Console.WriteLine("Para consultar todos los expedientes, presione 4 ");
+    Console.WriteLine("Para modificar un expediente, presione 5 ");
+
+    i = int.Parse(Console.ReadLine() ?? "");
+    switch (i)
+    {
+        case 1:
+            Console.WriteLine("Ingrese el id del usuario");
+            int idUsuario = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese la caratula");
+            string caratula = Console.ReadLine() ?? "";
+            Console.WriteLine("Ingrese el estado del expediente");
+            EstadoExpediente estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), Console.ReadLine() ?? "");
+            Expediente expediente = new(caratula, idUsuario, estado);
+            CasoDeUsoExpedienteAlta casoDeUsoExpedienteAlta = new(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+            casoDeUsoExpedienteAlta.Ejecutar(idUsuario, expediente);
+            break;
+        case 2:
+            Console.WriteLine("Ingrese el id del usuario");
+            idUsuario = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese el id del expediente a dar de baja");
+            int idExpedienteBaja = int.Parse(Console.ReadLine() ?? "");
+            CasoDeUsoExpedienteBaja casoDeUsoExpedienteBaja = new(new ExpedienteRepositorioTXT(), new TramiteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+            casoDeUsoExpedienteBaja.Ejecutar(idUsuario, idExpedienteBaja);
+            break;
+        case 3:
+            Console.WriteLine("Ingrese el id del usuario");
+            idUsuario = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese el id del expediente a consultar");
+            int idExpedienteConsulta = int.Parse(Console.ReadLine() ?? "");
+            CasoDeUsoExpedienteConsultaPorId casoDeUsoExpedienteConsultaPorId = new(new ExpedienteRepositorioTXT());
+            Expediente? expedienteRes = casoDeUsoExpedienteConsultaPorId.Ejecutar(idExpedienteConsulta);
+            Console.WriteLine(expedienteRes?.ToString() ?? "No se encontró el expediente");
+            break;
+        case 4:
+            Console.WriteLine("Ingrese el id del usuario");
+            idUsuario = int.Parse(Console.ReadLine() ?? "");
+            CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteConsultaTodos = new(new ExpedienteRepositorioTXT());
+            List<Expediente> listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar(idUsuario);
+            break;
+        case 5:
+            Console.WriteLine("Ingrese el id del usuario");
+            idUsuario = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese el id del expediente a modificar");
+            int idExpedienteModificacion = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese la caratula");
+            caratula = Console.ReadLine() ?? "";
+            Console.WriteLine("Ingrese el estado del expediente");
+            estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), Console.ReadLine() ?? "");
+            Expediente expedienteModificacion = new(idExpedienteModificacion, caratula, idUsuario, estado);
+            CasoDeUsoExpedienteModificacion casoDeUsoExpedienteModificacion = new(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+            casoDeUsoExpedienteModificacion.Ejecutar(idUsuario, expedienteModificacion);
+
+            break;
+
+
+    }
+
+}
+else
+{
+
+    Console.WriteLine("Para dar de alta un trámite, presione 1 ");
+    Console.WriteLine("Para dar de baja un trámite, presione 2 ");
+    Console.WriteLine("Para consultar un trámite por etiqueta, presione 3 ");
+    Console.WriteLine("Para modificar un tramite, presione 4 ");
+    i = int.Parse(Console.ReadLine() ?? "");
+    Tramite tramite = new();
+    switch (i)
+    {
+        case 1:
+            int usuario;
+            Console.WriteLine("Ingrese su número de usuario");
+            usuario = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese id del expediente correspondiente");
+            tramite.ExpedienteId = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese la etiqueta del trámite");
+            tramite.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese el contenido del trámite");
+            tramite.Contenido = Console.ReadLine() ?? "";
+            CasoDeUsoTramiteAlta casoDeUsoTramiteAlta = new(new TramiteRepositorioTXT(), new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+            casoDeUsoTramiteAlta.Ejecutar(usuario, tramite);
+            break;
+        case 2:
+            Console.WriteLine("Ingrese el id del usuario");
+            int idUsuario = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese el id del trámite a dar de baja");
+            int idTramiteBaja = int.Parse(Console.ReadLine() ?? "");
+            CasoDeUsoTramiteBaja casoDeUsoTramiteBaja = new(new TramiteRepositorioTXT(), new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+            casoDeUsoTramiteBaja.Ejecutar(idUsuario, idTramiteBaja);
+            break;
+        case 3:
+            Console.WriteLine("Ingrese el id del trámite a consultar");
+            EtiquetaTramite etiquetaTramiteConsulta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "");
+            CasoDeUsoTramiteConsultaPorEtiqueta casoDeUsoTramiteConsultaPorEtiqueta = new(new TramiteRepositorioTXT());
+            casoDeUsoTramiteConsultaPorEtiqueta.Ejecutar(etiquetaTramiteConsulta);
+            break;
+        case 4:
+            Console.WriteLine("Ingrese el id del usuario");
+            idUsuario = int.Parse(Console.ReadLine() ?? "");
+            CasoDeUsoTramiteModificacion casoDeUsoTramiteModificacion = new(new TramiteRepositorioTXT(), new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+            Console.WriteLine("Ingrese el id del trámite a modificar");
+            int id = int.Parse(Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese la etiqueta del trámite");
+            EtiquetaTramite etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "");
+            Console.WriteLine("Ingrese el contenido del trámite");
+            string contenido = Console.ReadLine() ?? "";
+            tramite = new(id, etiqueta, contenido, idUsuario);
+            casoDeUsoTramiteModificacion.Ejecutar(idUsuario, tramite);
+            break;
+    }
+}
+
+
+

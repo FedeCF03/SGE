@@ -15,9 +15,10 @@ public class CasoDeUsoExpedienteAlta(IExpedienteRepositorio repositorio, Servici
         {
             throw new AutorizacionExcepcion("No posee el permiso");
         }
-        if (!ExpedienteValidador.Validar(expediente, idUsuario))
+        string mensajeError;
+        if (!ExpedienteValidador.Validar(expediente, idUsuario, out mensajeError))
         {
-            throw new ValidacionException("No se pudo validar el expediente");
+            throw new ValidacionException(mensajeError);
         }
         Console.WriteLine("funciona");
         expediente.FechaCreacion = DateTime.Now;

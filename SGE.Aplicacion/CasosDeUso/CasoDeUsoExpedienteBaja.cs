@@ -5,20 +5,26 @@ public class CasoDeUsoExpedienteBaja(IExpedienteRepositorio repositorio, ITramit
     private readonly ServicioAutorizacionProvisorio _servicioAutorizacionProvisorio = servicioAutorizacionProvisorio;
     private readonly IExpedienteRepositorio _expedienteRepositorio = repositorio;
     private readonly ITramiteRepositorio _tramiteRepositorio = tramiteRepositorio;
-    public CasoDeUsoExpedienteBaja Ejecutar(int idUsuario, int idExpediente, params Permiso[] permisos)
+    public void Ejecutar(int idUsuario, int idExpediente)
     {
-        if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja, Permiso.TramiteBaja))
+        try
         {
-            throw new AutorizacionExcepcion("No posee el permiso");
+            if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteBaja, Permiso.TramiteBaja))
+            {
+                throw new AutorizacionExcepcion("No posee el permiso");
+            }
+            if (_expedienteRepositorio.Baja(idExpediente))
+            {
+                if (!_tramiteRepositorio.BorrarTodosDeIdExpediente(idExpediente))
+                    throw new RepositorioException("Hubo un error en el borrado de los trámites asociados al expediente");
+            }
+            else
+                throw new RepositorioException("No existe un expediente con ese ID");
         }
-        if (_expedienteRepositorio.Baja(idExpediente))
+        catch (Exception ex)
         {
-            if (!_tramiteRepositorio.BorrarTodosDeIdExpediente(idExpediente))
-                throw new RepositorioException("Hubo un error en el borrado de los trámites asociados al expediente");
+            Console.WriteLine(ex.Message);
         }
-        else
-            throw new RepositorioException("No existe un expediente con ese ID");
-        return this;
     }
 
 }

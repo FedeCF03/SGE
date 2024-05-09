@@ -13,14 +13,17 @@ public class CasoDeUsoExpedienteModificacion(IExpedienteRepositorio expedienteRe
         {
             throw new AutorizacionExcepcion("No posee el permiso");
         }
-        if (!ExpedienteValidador.Validar(expediente, idUsuario))
+        if (!ExpedienteValidador.Validar(expediente, idUsuario, out string mensajeError))
         {
-            throw new ValidacionException("No se pudo validar el expediente");
+            throw new ValidacionException(mensajeError);
         }
 
         expediente.FechaUltModificacion = DateTime.Now;
         expediente.UsuarioUltModificacion = idUsuario;
-        _expedienteRepositorio.Modificacion(idUsuario, expediente);//asumimos que no van a cambiar ni el id ni el estado
+        if (!_expedienteRepositorio.Modificacion(idUsuario, expediente))//asumimos que no van a cambiar ni el id ni el estado
+        {
+            throw new RepositorioException("No se encontró un expediente con ese ID o no se pudo modificar");
+        }
         return this;
     }
 

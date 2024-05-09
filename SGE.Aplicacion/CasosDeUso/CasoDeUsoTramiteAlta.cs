@@ -9,9 +9,9 @@ public class CasoDeUsoTramiteAlta(ITramiteRepositorio tramiteRepositorio, IExped
         {
             throw new AutorizacionExcepcion("No posee el permiso");
         }
-        if (!TramiteValidador.Validar(tramite, idUsuario))
+        if (!TramiteValidador.Validar(tramite, idUsuario, out string mensajeError))
         {
-            throw new ValidacionException("No se pudo validar el trámite");
+            throw new ValidacionException(mensajeError);
         }
 
         tramite.FechaCreacion = DateTime.Now;

@@ -1,12 +1,24 @@
 namespace SGE.Aplicacion;
 public static class TramiteValidador
 {
-    public static bool Validar(Tramite tramite, int usuario)
+    public static bool Validar(Tramite? tramite, int usuario, out string mensajeError)
     {
-        if (tramite == null || tramite.Contenido == null || tramite.Contenido.Equals("") || (usuario <= 0))
+        mensajeError = "";
+        if (tramite == null)
+        {
+            mensajeError = "El tramite no puede ser nulo.";
             return false;
-        return true;
+        }
+        if (string.IsNullOrWhiteSpace(tramite.Contenido))
+        {
+            mensajeError = "El contenido del tramite no puede estar vacio.";
+        }
+        if (usuario <= 0)
+        {
+            mensajeError += "El numero de usuario debe ser mayor que cero.\n";
+        }
 
+        return (mensajeError == "");
     }
 
 }

@@ -14,7 +14,5 @@ public interface ITramiteRepositorio
     List<Tramite>? ListarPorEtiqueta(EtiquetaTramite etiqueta);
     Tramite? BuscarUltimo(int idExpediente);
 
-    int DevolverIdInc();
-
 
 }

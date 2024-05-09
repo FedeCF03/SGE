@@ -25,17 +25,25 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     }
     public void Alta(Tramite tramite)
     {
-        using var sw = new StreamWriter(NombreArch, true);
-
+        try
         {
-            tramite.Id = DevolverIdInc();
-            sw.WriteLine(tramite.Id);
-            sw.WriteLine(tramite.ExpedienteId);
-            sw.WriteLine(tramite.Etiqueta);
-            sw.WriteLine(tramite.Contenido);
-            sw.WriteLine(tramite.FechaCreacion);
-            sw.WriteLine(tramite.FechaUltModificacion);
-            sw.WriteLine(tramite.UsuarioUltModificacion);
+            using var sw = new StreamWriter(NombreArch, true);
+
+            {
+                tramite.Id = DevolverIdInc();
+                sw.WriteLine(tramite.Id);
+                sw.WriteLine(tramite.ExpedienteId);
+                sw.WriteLine(tramite.Etiqueta);
+                sw.WriteLine(tramite.Contenido);
+                sw.WriteLine(tramite.FechaCreacion);
+                sw.WriteLine(tramite.FechaUltModificacion);
+                sw.WriteLine(tramite.UsuarioUltModificacion);
+            }
+
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
         }
 
     }
@@ -165,7 +173,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
             return null;
         }
     }
-    public int DevolverIdInc()
+    private int DevolverIdInc()
     {
         try
         {

@@ -29,16 +29,14 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     public ExpedienteRepositorioTXT()
     {
 
+        if (!File.Exists(NombreIds))
+        {
+            using var sw = new StreamWriter(NombreIds);
+            sw.WriteLine(1);
+        }
         if (!File.Exists(NombreArch))
         {
             using var sw = new StreamWriter(NombreArch);
-        }
-        {
-            if (!File.Exists(NombreIds))
-            {
-                using var sw = new StreamWriter(NombreIds);
-                sw.WriteLine(1);
-            }
         }
     }
 
@@ -48,7 +46,6 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
         {
             using var sw = new StreamWriter(NombreArch, true);
             expediente.Id = DevolverIdInc();
-            //cheackear si tiene -1 o que hacer?
             sw.WriteLine(expediente.Id);
             sw.WriteLine(expediente.Caratula);
             sw.WriteLine(expediente.FechaCreacion);
@@ -189,7 +186,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             return listaRetornar;
         }
     }
-    public int DevolverIdInc()
+    private int DevolverIdInc()
     {
         int id;
         try
@@ -317,6 +314,9 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
 
     }
 
+    public bool IsEmpty()
+    {
+        return new FileInfo(NombreArch).Length == 0;
+    }
 }
-
 // Path: SGE.Repositorios/UsuarioRepositorioTXT.cs

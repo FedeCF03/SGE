@@ -13,6 +13,5 @@ public interface IExpedienteRepositorio
 
     public List<Expediente>? ListarPorEstado(EstadoExpediente estado);
     public bool ActualizarEstado(int idUsuario, int idExpediente, EstadoExpediente? estado);
-    public int DevolverIdInc();
 
 }
