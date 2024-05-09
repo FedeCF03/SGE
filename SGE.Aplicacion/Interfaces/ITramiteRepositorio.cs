@@ -7,10 +7,9 @@ public interface ITramiteRepositorio
     bool BorrarTodosDeIdExpediente(int idExpediente);
     //No se puede modificar el id del tramite, asumimos que el id no se modifica en tramite
     bool Modificar(Tramite tramite);
-
     Tramite? BuscarPorId(int idTramite);
     List<Tramite>? Listar();
-
+    List<Tramite>? ListarTodosDeIdExpediente (int expedienteId);
     List<Tramite>? ListarPorEtiqueta(EtiquetaTramite etiqueta);
     Tramite? BuscarUltimo(int idExpediente);
 

@@ -10,7 +10,7 @@ internal static class EspecificacionCambioDeEstado
             switch (tramiteAux.Etiqueta)
             {
                 case EtiquetaTramite.Resolución:
-                    return EstadoExpediente.ConResolución;
+                    return EstadoExpediente.ConResolucion;
                 case EtiquetaTramite.PaseAEstudio:
                     return EstadoExpediente.ParaResolver;
                 case EtiquetaTramite.PaseAlArchivo:

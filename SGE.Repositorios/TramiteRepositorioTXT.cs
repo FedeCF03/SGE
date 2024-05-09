@@ -249,7 +249,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                     FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
                     UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "")
                 };
-                if (auxiliar.Etiqueta == etiqueta)
+                if (auxiliar.Etiqueta.Equals(etiqueta))
                     lista.Add(auxiliar);
             }
 
@@ -263,6 +263,39 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
 
 
     }
+
+    public List<Tramite>? ListarTodosDeIdExpediente (int expedienteId)
+    {
+        List<Tramite> lista = [];
+        try
+        {
+            Tramite auxiliar;
+            using var sr = new StreamReader(NombreArch);
+            while (!sr.EndOfStream)
+            {
+                auxiliar = new()
+                {
+                    Id = int.Parse(sr.ReadLine() ?? ""),
+                    ExpedienteId = int.Parse(sr.ReadLine() ?? ""),
+                    Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? ""),
+                    Contenido = sr.ReadLine(),
+                    FechaCreacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "")
+                };
+                if (auxiliar.ExpedienteId == expedienteId)
+                    lista.Add(auxiliar);
+            }
+            return lista;
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message);
+            return null;
+        }
+    }
+
+
     //Modifica el trámite en el archivo de texto y devuelve la etiqueta del trámite antes de ser modificado
     public bool Modificar(Tramite tramite)
     {
@@ -305,17 +338,12 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                 File.Delete(NombreArchAux);
 
             return id == tramite.Id;
-
-
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
             return false;
-
         }
-
-
     }
 
 

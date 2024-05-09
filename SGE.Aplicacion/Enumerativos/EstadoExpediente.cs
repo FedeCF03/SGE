@@ -1,10 +1,10 @@
 ﻿namespace SGE.Aplicacion;
 public enum EstadoExpediente
 {
-    ReciénIniciado,
+    RecienIniciado,
     ParaResolver,
-    ConResolución,
-    EnNotificación,
+    ConResolucion,
+    EnNotificacion,
     Finalizado
 
 }
