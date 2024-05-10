@@ -31,7 +31,7 @@ public class Expediente
 
     public override string ToString()
     {
-        return $"Id: {Id}\n\rCaratula: {Caratula}\n\rFechaCreacion: {FechaCreacion}\n\rFechaUltModificacion: {FechaUltModificacion}\n\rUsuarioUltModificacion: {UsuarioUltModificacion}\n\rEstado: {Estado}";
+        return $"Id: {Id}\n\rCaratula: {Caratula}\n\rFecha de creación: {FechaCreacion}\n\rFecha de última modificación: {FechaUltModificacion}\n\rNúmero del último usuario que modificó: {UsuarioUltModificacion}\n\rEstado: {Estado}";
     }
 
 }
