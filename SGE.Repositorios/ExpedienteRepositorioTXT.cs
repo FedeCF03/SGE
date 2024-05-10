@@ -107,6 +107,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
     {
         try
         {
+            Expediente? auxiliar = null;
             using var sr = new StreamReader(File.OpenRead(NombreArch));
             int n = -1;
             while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
@@ -116,12 +117,17 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             }
             if (n == idExpediente)
             {
-                Expediente auxiliar = new Expediente(n, sr.ReadLine() ?? "", DateTime.Parse(sr.ReadLine() ?? ""), DateTime.Parse(sr.ReadLine() ?? ""), int.Parse(sr.ReadLine() ?? ""), (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? ""));
-                return auxiliar;
-
+                auxiliar = new()
+                {
+                    Id = n,
+                    Caratula = sr.ReadLine() ?? "",
+                    FechaCreacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "-1"),
+                    Estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "")
+                };
             }
-            else
-                return null;
+            return auxiliar;
         }
         catch (Exception e)
         {
@@ -138,14 +144,15 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             using var sr = new StreamReader(NombreArch);
             while (!sr.EndOfStream)
             {
-                Expediente auxiliar = new Expediente(
-                    int.Parse(sr.ReadLine() ?? "-1"),
-                    sr.ReadLine() ?? "",
-                    DateTime.Parse(sr.ReadLine() ?? ""),
-                    DateTime.Parse(sr.ReadLine() ?? ""),
-                    int.Parse(sr.ReadLine() ?? "-1"),
-                    (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "")
-                );
+                Expediente auxiliar = new()
+                {
+                    Id = int.Parse(sr.ReadLine() ?? "-1"),
+                    Caratula = sr.ReadLine() ?? "",
+                    FechaCreacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "-1"),
+                    Estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "")
+                };
                 listaRetornar.Add(auxiliar);
             }
             return listaRetornar;
@@ -166,14 +173,15 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             using var sr = new StreamReader(File.OpenRead(NombreArch));
             while (!sr.EndOfStream)
             {
-                Expediente auxiliar = new Expediente(
-                    int.Parse(sr.ReadLine() ?? ""),
-                    sr.ReadLine() ?? "",
-                    DateTime.Parse(sr.ReadLine() ?? ""),
-                    DateTime.Parse(sr.ReadLine() ?? ""),
-                    int.Parse(sr.ReadLine() ?? ""),
-                    (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "")
-                );
+                Expediente auxiliar = new()
+                {
+                    Id = int.Parse(sr.ReadLine() ?? "-1"),
+                    Caratula = sr.ReadLine() ?? "",
+                    FechaCreacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                    UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "-1"),
+                    Estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "")
+                };
                 if (auxiliar.Estado == estadoExpediente)
                     listaRetornar.Add(auxiliar);
             };

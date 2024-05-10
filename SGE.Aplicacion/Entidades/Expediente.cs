@@ -12,17 +12,16 @@ public class Expediente
 
     public Expediente() { }
 
-    public Expediente(string caratula, int idUsuario, EstadoExpediente estado)
+    public Expediente(string caratula, EstadoExpediente estado)
     {
         Caratula = caratula;
-        UsuarioUltModificacion = idUsuario;
         Estado = estado;
     }
-    public Expediente(int id, string caratula, int idUsuario, EstadoExpediente estado) : this(caratula, idUsuario, estado)
+    public Expediente(int id, string caratula, int idUsuario, EstadoExpediente estado) : this(caratula, estado)
     {
         Id = id;
     }
-    public Expediente(int id, string caratula, DateTime fechaCreacion, DateTime fechaUltModificacin, int idUsuario, EstadoExpediente estado) : this(caratula, idUsuario, estado)
+    public Expediente(int id, string caratula, DateTime fechaCreacion, DateTime fechaUltModificacin, EstadoExpediente estado) : this(caratula, estado)
     {
         Id = id;
         FechaCreacion = fechaCreacion;

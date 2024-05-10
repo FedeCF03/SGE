@@ -3,6 +3,8 @@ using System.Diagnostics;
 using SGE.Aplicacion;
 using SGE.Repositorios;
 /*
+esta bien tener un constructor con todos los parametrosde la clase?
+
 que hacer cuando se borran todos los tramites asociados a un expediente
 Que hacer si catchea una excepcion de entrada salida
 Funciona así el alcanze del using?
@@ -22,7 +24,7 @@ si no hay entidades a mostrar se devuelve una lista vacía o null?
 */
 
 
-
+/*
 string continuar = "y";
 while (continuar.Equals("y"))
 {
@@ -194,12 +196,48 @@ while (continuar.Equals("y"))
     else
     {
         Console.WriteLine("Opción inválida");
+
+        Console.WriteLine("¿Desea continuar? y/n");
+        continuar = Console.ReadLine() ?? "n";
+
     }
+    */
 
-    Console.WriteLine("¿Desea continuar? y/n");
-    continuar = Console.ReadLine() ?? "n";
+CasoDeUsoExpedienteAlta casoDeUsoExpedienteAlta = new(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+Expediente expediente = new("caratula", EstadoExpediente.RecienIniciado);
+casoDeUsoExpedienteAlta.Ejecutar(1, expediente);
+CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteConsultaTodos = new(new ExpedienteRepositorioTXT());
+List<Expediente>? listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
+if (listaExpedientes != null)
+{
+    if (listaExpedientes.Count > 0)
+        foreach (Expediente e in listaExpedientes)
+        {
+            Console.WriteLine(e.ToString());
+        }
+    else Console.WriteLine("No hay expedientes");
+}
+CasoDeUsoTramiteAlta casoDeUsoTramiteAlta = new(new TramiteRepositorioTXT(), new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+Tramite tramite = new(expediente.Id, EtiquetaTramite.Resolucion, "contenido");
+casoDeUsoTramiteAlta.Ejecutar(1, tramite);
 
+listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
+if (listaExpedientes != null)
+{
+    if (listaExpedientes.Count > 0)
+        foreach (Expediente e in listaExpedientes)
+        {
+            Console.WriteLine(e.ToString());
+        }
+    else Console.WriteLine("No hay expedientes");
 }
 
 
-
+CasoDeUsoExpedienteBaja casoDeUsoExpedienteBaja = new(new ExpedienteRepositorioTXT(), new TramiteRepositorioTXT(), new ServicioAutorizacionProvisorio());
+casoDeUsoExpedienteBaja.Ejecutar(1, expediente.Id);
+listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
+if (listaExpedientes != null)
+    foreach (Expediente e in listaExpedientes)
+    {
+        Console.WriteLine(e.ToString());
+    }

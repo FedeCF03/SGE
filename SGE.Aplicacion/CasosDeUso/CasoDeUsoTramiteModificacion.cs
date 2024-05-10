@@ -2,14 +2,11 @@
 
 public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, ServicioAutorizacionProvisorio servicio)
 {
-    private readonly ITramiteRepositorio _tramiteRepositorio = tramiteRepositorio;
-    private readonly ServicioAutorizacionProvisorio _servicio = servicio;
-
     public void Ejecutar(int usuario, Tramite tramite)
     {
         try
         {
-            if (!_servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion))
+            if (!servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion))
                 throw new AutorizacionExcepcion("No posee el permiso");
 
             if (!TramiteValidador.Validar(tramite, usuario, out string mensajeError))
@@ -17,10 +14,10 @@ public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio
 
             tramite.FechaUltModificacion = DateTime.Now;
             tramite.UsuarioUltModificacion = usuario;
-            if (!_tramiteRepositorio.Modificar(tramite))
+            if (!tramiteRepositorio.Modificar(tramite))
                 throw new RepositorioException("No se encontró un trámite con ese ID");
 
-            if (_tramiteRepositorio.BuscarUltimo(tramite.ExpedienteId)?.Id == tramite.Id && !ServicioActualizacionEstado.ActualizarEstado(_tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, usuario))
+            if (tramiteRepositorio.BuscarUltimo(tramite.ExpedienteId)?.Id == tramite.Id && !ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, usuario))
                 throw new RepositorioException("No se pudo actualizar el estado del expediente");
 
         }

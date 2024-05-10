@@ -14,16 +14,15 @@ public class Tramite
     public Tramite()
     { }
 
-    public Tramite(int expedienteId, EtiquetaTramite etiqueta, string contenido, int idUsuario)
+    public Tramite(int expedienteId, EtiquetaTramite etiqueta, string contenido)
     {
         ExpedienteId = expedienteId;
         Etiqueta = etiqueta;
         Contenido = contenido;
-        UsuarioUltModificacion = idUsuario;
 
     }
 
-    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido, int idUsuario) : this(expedienteId, etiqueta, contenido, idUsuario)
+    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido) : this(expedienteId, etiqueta, contenido)
     {
         Id = id;
     }
