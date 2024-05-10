@@ -19,24 +19,18 @@ public class CasoDeUsoTramiteAlta(ITramiteRepositorio tramiteRepositorio, IExped
             tramite.FechaCreacion = DateTime.Now;
             tramite.FechaUltModificacion = DateTime.Now;
             tramite.UsuarioUltModificacion = idUsuario;
-
             tramiteRepositorio.Alta(tramite);
-            Console.WriteLine("añadió tramite");
-
             if (!ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, idUsuario))
             {
                 throw new RepositorioException("No hay un expediente asociado al trámite.");
             }
-
         }
         catch (Exception e)
         {
             Console.WriteLine(e.Message);
         }
         return this;
-
     }
-
     //Cambio de estado
     /*
     Además, resultaría beneficioso desacoplar el servicio de la especificación que define qué cambio de estado

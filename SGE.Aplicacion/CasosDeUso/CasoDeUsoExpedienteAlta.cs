@@ -13,8 +13,7 @@ public class CasoDeUsoExpedienteAlta(IExpedienteRepositorio repositorio, Servici
             {
                 throw new AutorizacionExcepcion("No posee el permiso");
             }
-            string mensajeError;
-            if (!ExpedienteValidador.Validar(expediente, idUsuario, out mensajeError))
+            if (!ExpedienteValidador.Validar(expediente, idUsuario, out string mensajeError))
             {
                 throw new ValidacionException(mensajeError);
             }

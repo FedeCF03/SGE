@@ -7,20 +7,19 @@ esta bien tener un constructor con todos los parametrosde la clase?
 
 que hacer cuando se borran todos los tramites asociados a un expediente
 Que hacer si catchea una excepcion de entrada salida
-Funciona así el alcanze del using?
 clases abstractas?
-actualizacion de estado de expediente cuando hacemos alta de expediente
-// tramite caso alto andando 10 puntitosss
-//tramite modificacion andando 10 puntitosss
-//tramite consulta etiqueta andando 10 puntitosss
-//tramite borrado andando 10 puntitosss
+tramite caso alto andando 10 puntitosss
+tramite modificacion andando 10 puntitosss
+tramite consulta etiqueta andando 10 puntitosss
+tramite borrado andando 10 puntitosss
 expediente alta andando 10 puntitosss
 expediente baja andando 10 puntitosss
 expediente consulta por id andando 10 puntitosss
 expediente consulta todos andando 10 puntitosss
 esta bien usar try catch en servicio actualizacion estado?
-q hacer con los permisos
+esta bien el try catch en la consola?
 si no hay entidades a mostrar se devuelve una lista vacía o null?
+esta bien actualizar los ids y las fechas en el objeto expediente/tramite que se pasa por parametro además de escribirlas en el texto?
 */
 
 
@@ -206,38 +205,61 @@ while (continuar.Equals("y"))
 CasoDeUsoExpedienteAlta casoDeUsoExpedienteAlta = new(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
 Expediente expediente = new("caratula", EstadoExpediente.RecienIniciado);
 casoDeUsoExpedienteAlta.Ejecutar(1, expediente);
-CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteConsultaTodos = new(new ExpedienteRepositorioTXT());
-List<Expediente>? listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
-if (listaExpedientes != null)
+
+CasoDeUsoExpedienteConsultaPorId casoDeUsoExpedienteConsultaPorId = new(new ExpedienteRepositorioTXT(), new TramiteRepositorioTXT());
+
+Expediente? expedienteRes = casoDeUsoExpedienteConsultaPorId.Ejecutar(expediente.Id, out List<Tramite>? listaTramites);
+Console.WriteLine("---------------------");
+
+Console.WriteLine(expedienteRes?.ToString() ?? "");
+if (listaTramites != null)
 {
-    if (listaExpedientes.Count > 0)
-        foreach (Expediente e in listaExpedientes)
+    if (listaTramites.Count > 0)
+    {
+        Console.WriteLine("Tramites asociados: ");
+        foreach (Tramite t in listaTramites)
         {
-            Console.WriteLine(e.ToString());
+            Console.WriteLine(t.ToString());
         }
-    else Console.WriteLine("No hay expedientes");
+    }
+    else Console.WriteLine("No hay trámites asociados");
 }
+Console.WriteLine("---------------------");
+
 CasoDeUsoTramiteAlta casoDeUsoTramiteAlta = new(new TramiteRepositorioTXT(), new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
-Tramite tramite = new(expediente.Id, EtiquetaTramite.Resolucion, "contenido");
+Tramite tramite = new(expediente.Id, EtiquetaTramite.Resolucion, "contenido"); // Creo un trámite
 casoDeUsoTramiteAlta.Ejecutar(1, tramite);
 
-listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
+Expediente expediente2 = new("caratula2", EstadoExpediente.RecienIniciado);
+casoDeUsoExpedienteAlta.Ejecutar(1, expediente2);
+
+
+Console.WriteLine("---------------------");
+
+CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteConsultaTodos = new(new ExpedienteRepositorioTXT());
+List<Expediente>? listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar(); //Consulto los ids
 if (listaExpedientes != null)
 {
     if (listaExpedientes.Count > 0)
+    {
+        Console.WriteLine("Expedientes: ");
         foreach (Expediente e in listaExpedientes)
         {
+            Console.WriteLine("---------------------");
             Console.WriteLine(e.ToString());
         }
+    }
     else Console.WriteLine("No hay expedientes");
 }
-
+Console.WriteLine("---------------------");
 
 CasoDeUsoExpedienteBaja casoDeUsoExpedienteBaja = new(new ExpedienteRepositorioTXT(), new TramiteRepositorioTXT(), new ServicioAutorizacionProvisorio());
 casoDeUsoExpedienteBaja.Ejecutar(1, expediente.Id);
+
 listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
 if (listaExpedientes != null)
     foreach (Expediente e in listaExpedientes)
     {
         Console.WriteLine(e.ToString());
     }
+Console.WriteLine("---------------------");

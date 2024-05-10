@@ -6,7 +6,6 @@ using SGE.Aplicacion;
 
 public class TramiteRepositorioTXT : ITramiteRepositorio
 {
-    // como implementar el autoincremento de id; 
     readonly string NombreIds = "idTramites.txt";
     readonly string NombreArch = "tramites.txt";
     readonly string NombreArchAux = "auxiliar_tramites.txt";
@@ -136,7 +135,6 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         }
         catch (Exception e)
         {
-            Console.WriteLine("Hubo un en mi");
             Console.WriteLine(e.Message);
             return false;
         }
@@ -264,7 +262,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
 
     }
 
-    public List<Tramite>? ListarTodosDeIdExpediente (int expedienteId)
+    public List<Tramite>? ListarTodosDeIdExpediente(int expedienteId)
     {
         List<Tramite> lista = [];
         try
@@ -367,7 +365,6 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
                     resultado.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
                     resultado.ExpedienteId = auxiliar.ExpedienteId;
                     resultado.Id = auxiliar.Id;
-                    Console.WriteLine("tramite encontrado");
                 }
                 else
                 {
