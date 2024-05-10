@@ -5,30 +5,35 @@ public class CasoDeUsoTramiteAlta(ITramiteRepositorio tramiteRepositorio, IExped
 {
     public CasoDeUsoTramiteAlta Ejecutar(int idUsuario, Tramite tramite)
     {
-        if (!servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.TramiteAlta))
+        try
         {
-            throw new AutorizacionExcepcion("No posee el permiso");
+            if (!servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.TramiteAlta))
+            {
+                throw new AutorizacionExcepcion("No posee el permiso");
+            }
+            if (!TramiteValidador.Validar(tramite, idUsuario, out string mensajeError))
+            {
+                throw new ValidacionException(mensajeError);
+            }
+
+            tramite.FechaCreacion = DateTime.Now;
+            tramite.FechaUltModificacion = DateTime.Now;
+            tramite.UsuarioUltModificacion = idUsuario;
+
+            tramiteRepositorio.Alta(tramite);
+            Console.WriteLine("añadió tramite");
+
+            if (!ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, idUsuario))
+            {
+                throw new RepositorioException("No hay un expediente asociado al trámite.");
+            }
+
         }
-        if (!TramiteValidador.Validar(tramite, idUsuario, out string mensajeError))
+        catch (Exception e)
         {
-            throw new ValidacionException(mensajeError);
+            Console.WriteLine(e.Message);
         }
-
-        tramite.FechaCreacion = DateTime.Now;
-        tramite.FechaUltModificacion = DateTime.Now;
-        tramite.UsuarioUltModificacion = idUsuario;
-
-        tramiteRepositorio.Alta(tramite);
-        Console.WriteLine("añadió tramite");
-
-        if (!ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, idUsuario))
-        {
-            throw new RepositorioException("No hay un expediente asociado al trámite.");
-        }
-
-
         return this;
-
 
     }
 

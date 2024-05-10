@@ -9,22 +9,31 @@ public class CasoDeUsoExpedienteModificacion(IExpedienteRepositorio expedienteRe
     private readonly ServicioAutorizacionProvisorio _servicioAutorizacionProvisorio = servicioAutorizacionProvisorio;
     public CasoDeUsoExpedienteModificacion Ejecutar(int idUsuario, Expediente expediente)
     {
-        if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
+        try
         {
-            throw new AutorizacionExcepcion("No posee el permiso");
-        }
-        if (!ExpedienteValidador.Validar(expediente, idUsuario, out string mensajeError))
-        {
-            throw new ValidacionException(mensajeError);
-        }
+            if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
+            {
+                throw new AutorizacionExcepcion("No posee el permiso");
+            }
+            if (!ExpedienteValidador.Validar(expediente, idUsuario, out string mensajeError))
+            {
+                throw new ValidacionException(mensajeError);
+            }
 
-        expediente.FechaUltModificacion = DateTime.Now;
-        expediente.UsuarioUltModificacion = idUsuario;
-        if (!_expedienteRepositorio.Modificacion(idUsuario, expediente))//asumimos que no van a cambiar ni el id ni el estado
+            expediente.FechaUltModificacion = DateTime.Now;
+            expediente.UsuarioUltModificacion = idUsuario;
+            if (!_expedienteRepositorio.Modificacion(idUsuario, expediente))//asumimos que no van a cambiar ni el id ni el estado
+            {
+                throw new RepositorioException("No se encontró un expediente con ese ID o no se pudo modificar");
+            }
+
+        }
+        catch (Exception e)
         {
-            throw new RepositorioException("No se encontró un expediente con ese ID o no se pudo modificar");
+            Console.WriteLine(e.Message);
         }
         return this;
+
     }
 
 }

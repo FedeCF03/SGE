@@ -46,7 +46,7 @@ while (continuar.Equals("y"))
                 Console.WriteLine("Ingrese la caratula");
                 string caratula = Console.ReadLine() ?? "";
                 Console.WriteLine("Ingrese el estado del expediente");
-                EstadoExpediente estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), Console.ReadLine() ?? "");
+                EstadoExpediente estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), Console.ReadLine() ?? "", true);
                 Expediente expediente = new(caratula, idUsuario, estado);
                 CasoDeUsoExpedienteAlta casoDeUsoExpedienteAlta = new(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
                 casoDeUsoExpedienteAlta.Ejecutar(idUsuario, expediente);
@@ -70,7 +70,7 @@ while (continuar.Equals("y"))
                 {
                     Console.WriteLine(expedienteRes.ToString());
                     Console.WriteLine("---------------------");
-                    if (listaTramites != null && listaTramites.Count > 0)
+                    if (listaTramites?.Count == 0)
                     {
                         Console.WriteLine("Tramites asociados: ");
                         Console.WriteLine("---------------------");
@@ -84,21 +84,18 @@ while (continuar.Equals("y"))
                         Console.WriteLine("No hay trámites asociados");
 
                 }
-                else
-                {
-                    Console.WriteLine("No se encontró el expediente");
-                }
                 break;
             case 4:
                 Console.WriteLine(Path.GetFullPath("Expedientes.txt"));
                 Console.WriteLine("Ingrese el id del usuario");
                 idUsuario = int.Parse(Console.ReadLine() ?? "");
                 CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteConsultaTodos = new(new ExpedienteRepositorioTXT());
-                List<Expediente> listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar(idUsuario);
-                foreach (Expediente e in listaExpedientes)
-                {
-                    Console.WriteLine(e.ToString());
-                }
+                List<Expediente>? listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar(idUsuario);
+                if (listaExpedientes != null)
+                    foreach (Expediente e in listaExpedientes)
+                    {
+                        Console.WriteLine(e.ToString());
+                    }
                 break;
             case 5:
                 Console.WriteLine("Ingrese el id del usuario");
@@ -108,14 +105,11 @@ while (continuar.Equals("y"))
                 Console.WriteLine("Ingrese la caratula");
                 caratula = Console.ReadLine() ?? "";
                 Console.WriteLine("Ingrese el estado del expediente");
-                estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), Console.ReadLine() ?? "");
+                estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), Console.ReadLine() ?? "", true);
                 Expediente expedienteModificacion = new(idExpedienteModificacion, caratula, idUsuario, estado);
                 CasoDeUsoExpedienteModificacion casoDeUsoExpedienteModificacion = new(new ExpedienteRepositorioTXT(), new ServicioAutorizacionProvisorio());
                 casoDeUsoExpedienteModificacion.Ejecutar(idUsuario, expedienteModificacion);
-
                 break;
-
-
         }
 
     }
@@ -141,7 +135,7 @@ while (continuar.Equals("y"))
                 tramite.ExpedienteId = int.Parse(Console.ReadLine() ?? "");
 
                 Console.WriteLine("Ingrese la etiqueta del trámite");
-                tramite.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "");
+                tramite.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "", true);
 
                 Console.WriteLine("Ingrese el contenido del trámite");
                 tramite.Contenido = Console.ReadLine() ?? "";
@@ -158,8 +152,8 @@ while (continuar.Equals("y"))
                 casoDeUsoTramiteBaja.Ejecutar(idUsuario, idTramiteBaja);
                 break;
             case 3:
-                Console.WriteLine("Ingrese el id del trámite a consultar");
-                EtiquetaTramite etiquetaTramiteConsulta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "");
+                Console.WriteLine("Ingrese la etiqueta del trámite a consultar");
+                EtiquetaTramite etiquetaTramiteConsulta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "", true);
                 CasoDeUsoTramiteConsultaPorEtiqueta casoDeUsoTramiteConsultaPorEtiqueta = new(new TramiteRepositorioTXT());
                 List<Tramite> listaTramites = casoDeUsoTramiteConsultaPorEtiqueta.Ejecutar(etiquetaTramiteConsulta);
                 if (listaTramites.Count > 0)
@@ -188,7 +182,7 @@ while (continuar.Equals("y"))
                 tramite.ExpedienteId = int.Parse(Console.ReadLine() ?? "");
 
                 Console.WriteLine("Ingrese la etiqueta del trámite");
-                tramite.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "");
+                tramite.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "", true);
 
                 Console.WriteLine("Ingrese el contenido del trámite");
                 tramite.Contenido = Console.ReadLine() ?? "";

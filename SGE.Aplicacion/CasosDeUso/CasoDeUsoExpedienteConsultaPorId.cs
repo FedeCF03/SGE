@@ -8,17 +8,12 @@ public class CasoDeUsoExpedienteConsultaPorId(IExpedienteRepositorio expedienteR
     {
         try
         {
-            Expediente? expediente = _expedienteRepositorio.BuscarPorId(id);
-            if (expediente == null)
-            {
-                throw new RepositorioException("No se encontró el expediente");
-            }
-            tramites = _tramiteRepositorio.ListarTodosDeIdExpediente(id);
+            Expediente? expediente = _expedienteRepositorio.BuscarPorId(id) ?? throw new RepositorioException("No se encontró el expediente");
+            tramites = _tramiteRepositorio.ListarTodosDeIdExpediente(id) ?? throw new RepositorioException("Hubo un error listando los tramites del expediente");
             return expediente;
         }
         catch (Exception ex)
         {
-
             Console.WriteLine(ex.Message);
             tramites = null;
             return null;

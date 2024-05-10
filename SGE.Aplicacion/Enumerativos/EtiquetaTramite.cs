@@ -5,7 +5,7 @@ public enum EtiquetaTramite
     EscritoPresentado,
     PaseAEstudio,
     Despacho,
-    Resolución,
-    Notificación,
+    Resolucion,
+    Notificacion,
     PaseAlArchivo,
 }

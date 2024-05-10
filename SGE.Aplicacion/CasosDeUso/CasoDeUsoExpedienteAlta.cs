@@ -10,23 +10,28 @@ public class CasoDeUsoExpedienteAlta(IExpedienteRepositorio repositorio, Servici
     public CasoDeUsoExpedienteAlta Ejecutar(int idUsuario, Expediente expediente)
 
     {
-
-        if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
+        try
         {
-            throw new AutorizacionExcepcion("No posee el permiso");
+            if (!_servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
+            {
+                throw new AutorizacionExcepcion("No posee el permiso");
+            }
+            string mensajeError;
+            if (!ExpedienteValidador.Validar(expediente, idUsuario, out mensajeError))
+            {
+                throw new ValidacionException(mensajeError);
+            }
+            expediente.FechaCreacion = DateTime.Now;
+            expediente.FechaUltModificacion = DateTime.Now;
+            expediente.UsuarioUltModificacion = idUsuario;
+            _repositorio.Alta(expediente);
         }
-        string mensajeError;
-        if (!ExpedienteValidador.Validar(expediente, idUsuario, out mensajeError))
+        catch (Exception e)
         {
-            throw new ValidacionException(mensajeError);
+            Console.WriteLine(e.Message);
         }
-        Console.WriteLine("funciona");
-        expediente.FechaCreacion = DateTime.Now;
-        expediente.FechaUltModificacion = DateTime.Now;
-        expediente.UsuarioUltModificacion = idUsuario;
-        _repositorio.Alta(expediente);
-        Console.WriteLine("paso repositorio.alta");
         return this;
+
     }
 
 
