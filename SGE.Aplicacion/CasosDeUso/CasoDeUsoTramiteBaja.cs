@@ -1,30 +1,17 @@
 ﻿namespace SGE.Aplicacion;
 
-public class CasoDeUsoTramiteBaja(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, ServicioAutorizacionProvisorio servicioAutorizacionProvisorio)
+public class CasoDeUsoTramiteBaja(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, IServicioAutorizacion servicioAutorizacionProvisorio, IEspecificacionCambioDeEstado especificacionCambioDeEstado)
 {
 
     public CasoDeUsoTramiteBaja Ejecutar(int usuario, int idTramite)
     {
-        try
-        {
-            if (!servicioAutorizacionProvisorio.PoseeElPermiso(usuario, Permiso.TramiteBaja))
-            {
-                throw new AutorizacionExcepcion("No posee el permiso");
-            }
-            int idExpediente;
-            if ((idExpediente = tramiteRepositorio.Baja(idTramite)) == -1)
-            {
-                throw new RepositorioException("El trámite no tiene asignado ningún expediente");
-            }
-            if (!ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, idExpediente, usuario))
-                throw new RepositorioException("No hay un expediente asociado al trámite");
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-        return this;
+        if (!servicioAutorizacionProvisorio.PoseeElPermiso(usuario, Permiso.TramiteBaja))
+            throw new AutorizacionExcepcion("No posee el permiso");
 
+        tramiteRepositorio.Baja(idTramite, out int idExpediente);
+        ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, especificacionCambioDeEstado, idExpediente, usuario);
+        Console.WriteLine("Se ha eliminado correctamente el trámite");
+        return this;
     }
 }
 

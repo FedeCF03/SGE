@@ -8,29 +8,27 @@ public class Expediente
     public DateTime FechaCreacion { get; set; }
     public DateTime FechaUltModificacion { get; set; }
     public int UsuarioUltModificacion { get; set; }
-    public EstadoExpediente Estado { get; set; }
+    public EstadoExpediente Estado { get; set; } = EstadoExpediente.RecienIniciado;
+
+    public List<Tramite> ListaTramite { get; set; } = [];
 
     public Expediente() { }
 
-    public Expediente(string caratula, EstadoExpediente estado)
+    public Expediente(string caratula)
     {
         Caratula = caratula;
-        Estado = estado;
-    }
-    public Expediente(int id, string caratula, int idUsuario, EstadoExpediente estado) : this(caratula, estado)
-    {
-        Id = id;
-    }
-    public Expediente(int id, string caratula, DateTime fechaCreacion, DateTime fechaUltModificacin, EstadoExpediente estado) : this(caratula, estado)
-    {
-        Id = id;
-        FechaCreacion = fechaCreacion;
-        FechaUltModificacion = fechaUltModificacin;
     }
 
     public override string ToString()
     {
-        return $"Id: {Id}\n\rCaratula: {Caratula}\n\rFecha de creación: {FechaCreacion}\n\rFecha de última modificación: {FechaUltModificacion}\n\rNúmero del último usuario que modificó: {UsuarioUltModificacion}\n\rEstado: {Estado}";
+        return $"ID: {Id,30}\n\rCaratula: {Caratula,30}\n\rFecha de creación: {FechaCreacion,30}\n\rFecha de última modificación: {FechaUltModificacion,30}\n\rNúmero del último usuario que modificó: {UsuarioUltModificacion,30}\n\rEstado: {Estado,30}";
     }
 
+    public string TramitesToString()
+    {
+        string strRet = "";
+        foreach (Tramite t in ListaTramite)
+            strRet += t.ToString() + "\n\r";
+        strRet = strRet == "";
+    }
 }

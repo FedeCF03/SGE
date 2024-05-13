@@ -1,32 +1,26 @@
 ﻿namespace SGE.Aplicacion;
 
-public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, ServicioAutorizacionProvisorio servicio)
+public class CasoDeUsoTramiteModificacion(ITramiteRepositorio tramiteRepositorio, IExpedienteRepositorio expedienteRepositorio, IServicioAutorizacion servicio, IEspecificacionCambioDeEstado especificacionCambioDeEstado)
 {
-    public void Ejecutar(int usuario, Tramite tramite)
+    public CasoDeUsoTramiteModificacion Ejecutar(int usuario, Tramite tramite)
     {
-        try
-        {
-            if (!servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion))
-                throw new AutorizacionExcepcion("No posee el permiso");
+        if (!servicio.PoseeElPermiso(usuario, Permiso.TramiteModificacion))
+            throw new AutorizacionExcepcion("No posee el permiso");
 
-            if (!TramiteValidador.Validar(tramite, usuario, out string mensajeError))
-                throw new ValidacionException(mensajeError);
+        if (!TramiteValidador.Validar(tramite, usuario, out string mensajeError))
+            throw new ValidacionException(mensajeError);
 
-            tramite.FechaUltModificacion = DateTime.Now;
-            tramite.UsuarioUltModificacion = usuario;
-            if (!tramiteRepositorio.Modificar(tramite))
-                throw new RepositorioException("No se encontró un trámite con ese ID");
+        tramite.FechaUltModificacion = DateTime.Now;
+        tramite.UsuarioUltModificacion = usuario;
 
-            if (tramiteRepositorio.BuscarUltimo(tramite.ExpedienteId)?.Id == tramite.Id && !ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, tramite.ExpedienteId, usuario))
-                throw new RepositorioException("No se pudo actualizar el estado del expediente");
+        tramiteRepositorio.Modificar(tramite);
+        //Con la primera condición evaluamos si el trámite que modificamos es el último y si no lo es, no se actualiza el estado del expediente.
+        Tramite? auxiliar = tramiteRepositorio.BuscarUltimo(tramite.ExpedienteId);
+        if (auxiliar?.Id == tramite.Id)
+            ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, especificacionCambioDeEstado, tramite.ExpedienteId, usuario);
 
-        }
-        catch (Exception e)
-        {
-            Console.WriteLine(e.Message);
-        }
-
-
+        Console.WriteLine("Se ha agregado modificado el trámite y el estado del expediente asignado si es que fue necesario");
+        return this;
     }
 
 }

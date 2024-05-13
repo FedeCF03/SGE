@@ -2,34 +2,25 @@
 
 namespace SGE.Aplicacion;
 
-public class CasoDeUsoExpedienteAlta(IExpedienteRepositorio repositorio, ServicioAutorizacionProvisorio servicioAutorizacionProvisorio)
+public class CasoDeUsoExpedienteAlta(IExpedienteRepositorio repositorio, IServicioAutorizacion servicioAutorizacionProvisorio)
 {
     public CasoDeUsoExpedienteAlta Ejecutar(int idUsuario, Expediente expediente)
 
     {
-        try
+        if (!servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
         {
-            if (!servicioAutorizacionProvisorio.PoseeElPermiso(idUsuario, Permiso.ExpedienteAlta))
-            {
-                throw new AutorizacionExcepcion("No posee el permiso");
-            }
-            if (!ExpedienteValidador.Validar(expediente, idUsuario, out string mensajeError))
-            {
-                throw new ValidacionException(mensajeError);
-            }
-            expediente.FechaCreacion = DateTime.Now;
-            expediente.FechaUltModificacion = DateTime.Now;
-            expediente.UsuarioUltModificacion = idUsuario;
-            repositorio.Alta(expediente);
+            throw new AutorizacionExcepcion("No posee el permiso");
         }
-        catch (Exception e)
+        if (!ExpedienteValidador.Validar(expediente, idUsuario, out string mensajeError))
         {
-            Console.WriteLine(e.Message);
+            throw new ValidacionException(mensajeError);
         }
+        expediente.FechaCreacion = DateTime.Now;
+        expediente.FechaUltModificacion = DateTime.Now;
+        expediente.UsuarioUltModificacion = idUsuario;
+        repositorio.Alta(expediente);
+        Console.WriteLine("Se ha agregado correctamente el expediente");
         return this;
 
     }
-
-
-
 }

@@ -22,14 +22,9 @@ public class Tramite
 
     }
 
-    public Tramite(int id, int expedienteId, EtiquetaTramite etiqueta, string contenido) : this(expedienteId, etiqueta, contenido)
-    {
-        Id = id;
-    }
-
     public override string ToString()
     {
-        return $"Id: {Id}\n\rExpedienteId: {ExpedienteId}\n\rEtiqueta: {Etiqueta}\n\rContenido: {Contenido}\n\rFecha de creación: {FechaCreacion}\n\rFecha de última modificación: {FechaUltModificacion}\n\rNúmero de último usuario que modificó: {UsuarioUltModificacion}";
+        return $"Id: {Id,30}\n\rExpedienteId: {ExpedienteId,30}\n\rEtiqueta: {Etiqueta,30}\n\rContenido: {Contenido,30}\n\rFecha de creación: {FechaCreacion,30}\n\rFecha de última modificación: {FechaUltModificacion,30}\n\rNúmero de último usuario que modificó: {UsuarioUltModificacion,30}";
 
     }
 

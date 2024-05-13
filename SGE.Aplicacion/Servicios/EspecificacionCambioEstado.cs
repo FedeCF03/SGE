@@ -1,32 +1,24 @@
 ﻿namespace SGE.Aplicacion;
 
-internal static class EspecificacionCambioDeEstado
+public class EspecificacionCambioDeEstado : IEspecificacionCambioDeEstado
 {
-    internal static EstadoExpediente? BuscarEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
+    public EstadoExpediente? DevolverEstado(int ExpedienteId, ITramiteRepositorio tramiteRepositorio)
     {
         Tramite? tramiteAux = tramiteRepositorio.BuscarUltimo(ExpedienteId);
-        if (tramiteAux != null)
+        //Si el trámite es null, significa que el expediente no tiene trámites por lo que se lleva el estado del expediente
+        //al original
+        if (tramiteAux == null)
+            return EstadoExpediente.RecienIniciado;
+
+        return tramiteAux.Etiqueta switch
         {
-            switch (tramiteAux.Etiqueta)
-            {
-                case EtiquetaTramite.Resolucion:
-                    return EstadoExpediente.ConResolucion;
-                case EtiquetaTramite.PaseAEstudio:
-                    return EstadoExpediente.ParaResolver;
-                case EtiquetaTramite.PaseAlArchivo:
-                    return EstadoExpediente.Finalizado;
-                default:
-                    return null;
-            }
-        }
-        else
-        {
-            throw new RepositorioException("No se encontró el trámite con ese numero de expediente");
-
-        }
-
-
+            EtiquetaTramite.Resolucion => EstadoExpediente.ConResolucion,
+            EtiquetaTramite.PaseAEstudio => EstadoExpediente.ParaResolver,
+            EtiquetaTramite.PaseAlArchivo => EstadoExpediente.Finalizado,
+            _ => null,
+        };
     }
 }
+
 
 
