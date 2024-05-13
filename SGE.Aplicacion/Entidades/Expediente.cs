@@ -10,7 +10,7 @@ public class Expediente
     public int UsuarioUltModificacion { get; set; }
     public EstadoExpediente Estado { get; set; } = EstadoExpediente.RecienIniciado;
 
-    public List<Tramite> ListaTramite { get; set; } = [];
+    public List<Tramite> ListaTramites { get; set; } = [];
 
     public Expediente() { }
 
@@ -21,14 +21,19 @@ public class Expediente
 
     public override string ToString()
     {
-        return $"ID: {Id,30}\n\rCaratula: {Caratula,30}\n\rFecha de creación: {FechaCreacion,30}\n\rFecha de última modificación: {FechaUltModificacion,30}\n\rNúmero del último usuario que modificó: {UsuarioUltModificacion,30}\n\rEstado: {Estado,30}";
+        return $"{"ID:",-40}{Id}\n\r{"Caratula:",-40}{Caratula}\n\r{"Fecha de creacion:",-40}{FechaCreacion:dd/MM/yyyy H:mm:ss}\n\r{"Fecha de ultima modificacion:",-40}{FechaUltModificacion:dd/MM/yyyy H:mm:ss}\n\r{"Numero del ultimo usuario que modifico:",-40}{UsuarioUltModificacion}\n\r{"Estado:",-40}{Estado}";
+
     }
 
     public string TramitesToString()
     {
-        string strRet = "";
-        foreach (Tramite t in ListaTramite)
+        string strRet = ListaTramites.Count == 0 ? "No hay tramites asociados" : "Tramites asociados:\n\r";
+
+        foreach (Tramite t in ListaTramites)
+        {
+            strRet += "------------------\n\r";
             strRet += t.ToString() + "\n\r";
-        strRet = strRet == "";
+        }
+        return strRet;
     }
 }

@@ -19,7 +19,6 @@ public class CasoDeUsoExpedienteAlta(IExpedienteRepositorio repositorio, IServic
         expediente.FechaUltModificacion = DateTime.Now;
         expediente.UsuarioUltModificacion = idUsuario;
         repositorio.Alta(expediente);
-        Console.WriteLine("Se ha agregado correctamente el expediente");
         return this;
 
     }

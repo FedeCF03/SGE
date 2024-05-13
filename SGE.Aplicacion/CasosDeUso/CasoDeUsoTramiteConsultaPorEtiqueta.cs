@@ -6,7 +6,6 @@ public class CasoDeUsoTramiteConsultaPorEtiqueta(ITramiteRepositorio tramiteRepo
     public List<Tramite> Ejecutar(EtiquetaTramite etiqueta)
     {
 
-        Console.WriteLine(etiqueta);
         List<Tramite>? lista = tramiteRepositorio.ListarPorEtiqueta(etiqueta) ?? throw new RepositorioException("Hubo un error listando los trámites");
         return lista;
     }

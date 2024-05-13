@@ -1,19 +1,4 @@
-﻿/* Copyrigth © 2025 - Grupo 2
- * 
- * Licencia: 
- * 
- * Se concede permiso, de forma gratuita, a cualquier persona que obtenga una copia de este software y de los archivos de documentación asociados (el "Software"), para utilizar el Software sin restricción, incluyendo sin limitación los derechos para usar, copiar, modificar, fusionar, publicar, distribuir, sublicenciar, y/o vender copias del Software, y para permitir a las personas a las que se les proporcione el Software a hacer lo mismo, con sujeción a las siguientes condiciones:
- * 
- * El aviso de copyright y la siguiente licencia serán incluidos en todas las copias o partes sustanciales del Software.
- * 
- * EL SOFTWARE SE ENTREGA "TAL CUAL", SIN GARANTÍA DE NINGÚN TIPO, EXPRESA O IMPLÍCITA, INCLUYENDO PERO NO LIMITADO A GARANTÍAS DE COMERCIALIZACIÓN, IDONEIDAD PARA UN PROPÓSITO PARTICULAR Y NO INFRACCIÓN. EN NINGÚN CASO LOS AUTORES O PROPIETARIOS DE LOS DERECHOS DE AUTOR SERÁN RESPONSABLES DE NINGUNA RECLAMACIÓN, DAÑOS U OTRAS RESPONSABILIDADES, YA SEA EN UNA ACCIÓN DE CONTRATO, AGRAVIO O CUALQUIER OTRO MOTIVO, DERIVADAS DE, FUERA O EN CONEXIÓN CON EL SOFTWARE O EL USO U OTRO TIPO DE ACCIONES EN EL SOFTWARE.
- * 
- * 
- * 
-
-*/
-
-
+﻿
 namespace SGE.Repositorios;
 
 using System.Collections.Generic;
@@ -110,14 +95,16 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             if (id == expediente.Id)
             {
                 sw.WriteLine(id);
+                sr.ReadLine();
                 sw.WriteLine(expediente.Caratula);
-                sw.WriteLine(expediente.FechaCreacion);
-                sw.WriteLine(DateTime.Now);
-                sw.WriteLine(idUsuario);
-                sw.WriteLine(expediente.Estado);
 
-                for (int i = 0; i < 6; i++)
-                    sr.ReadLine();
+                sw.WriteLine(DateTime.Parse(sr.ReadLine() ?? ""));
+
+                sr.ReadLine();
+                sw.WriteLine(expediente.FechaUltModificacion);
+                sr.ReadLine();
+                sw.WriteLine(idUsuario);
+                sw.WriteLine((EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? ""));
 
                 sw.Write(sr.ReadToEnd());
             }
@@ -128,13 +115,12 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
         else
         {
             File.Delete(NombreArchAux);
-            throw new RepositorioException("No se encontró un expediente con ese ID o no se pudo modificar");
+            throw new RepositorioException("No se encontro un expediente con ese ID o no se pudo modificar");
         }
 
     }
-    public Expediente? BuscarPorId(int idExpediente)
+    public Expediente BuscarPorId(int idExpediente)
     {
-        Expediente? auxiliar = null;
         using var sr = new StreamReader(File.OpenRead(NombreArch));
         int n = -1;
         while (!sr.EndOfStream && (n = int.Parse(sr.ReadLine() ?? "")) != idExpediente)
@@ -142,9 +128,11 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
             for (int i = 0; i < 5; i++)
                 sr.ReadLine();
         }
-        if (n == idExpediente)
+        if (n != idExpediente)
+            throw new RepositorioException("No se encontro un expediente con ese ID");
+        else
         {
-            auxiliar = new()
+            Expediente auxiliar = new()
             {
                 Id = n,
                 Caratula = sr.ReadLine() ?? "",
@@ -153,9 +141,10 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
                 UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "-1"),
                 Estado = (EstadoExpediente)Enum.Parse(typeof(EstadoExpediente), sr.ReadLine() ?? "")
             };
+            return auxiliar;
         }
-        return auxiliar;
     }
+
 
     public List<Expediente> ListarTodos()
     {
@@ -235,7 +224,7 @@ public class ExpedienteRepositorioTXT : IExpedienteRepositorio
         else
         {
             File.Delete(NombreArchAux);
-            throw new RepositorioException("No hay un expediente asociado al trámite. Por favor agregue un expediente primero");
+            throw new RepositorioException("No hay un expediente asociado al tramite. Por favor agregue un expediente primero");
         }
     }
 

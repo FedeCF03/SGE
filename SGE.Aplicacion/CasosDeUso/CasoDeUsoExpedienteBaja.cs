@@ -8,7 +8,6 @@ public class CasoDeUsoExpedienteBaja(IExpedienteRepositorio expedienteRepositori
             throw new AutorizacionExcepcion("No posee el permiso");
         expedienteRepositorio.Baja(idExpediente);
         tramiteRepositorio.BorrarTodosDeIdExpediente(idExpediente);
-        Console.WriteLine("Se han eliminado correctamente el expediente y sus trámites");
         return this;
     }
 

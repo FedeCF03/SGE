@@ -2,7 +2,7 @@
 
 public class CasoDeUsoExpedienteConsultaTodos(IExpedienteRepositorio expedienteRepositorio)
 {
-    public List<Expediente>? Ejecutar()
+    public List<Expediente> Ejecutar()
     {
 
         List<Expediente> lista = expedienteRepositorio.ListarTodos();

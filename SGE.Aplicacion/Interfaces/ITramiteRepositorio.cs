@@ -7,7 +7,7 @@ public interface ITramiteRepositorio
     void Baja(int idTramite, out int idExpediente);
     void Modificar(Tramite tramite);
     //No se puede modificar el id del tramite, asumimos que el id no se modifica en tramite
-    Tramite? BuscarPorId(int idTramite);
+    Tramite BuscarPorId(int idTramite);
     List<Tramite> ListarTodos();
     List<Tramite> ListarPorEtiqueta(EtiquetaTramite etiqueta);
     List<Tramite> ListarTodosDeIdExpediente(int expedienteId);

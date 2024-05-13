@@ -1,6 +1,4 @@
-﻿using System.Collections;
-using System.Diagnostics;
-using SGE.Aplicacion;
+﻿using SGE.Aplicacion;
 using SGE.Repositorios;
 ITramiteRepositorio tramiteRepo = new TramiteRepositorioTXT();
 IExpedienteRepositorio expedienteRepo = new ExpedienteRepositorioTXT();
@@ -39,6 +37,8 @@ while (continuar.Equals("y"))
                     Expediente expediente = new(caratula);
                     CasoDeUsoExpedienteAlta casoDeUsoExpedienteAlta = new(expedienteRepo, servicioAutorizacionProvisorio);
                     casoDeUsoExpedienteAlta.Ejecutar(idUsuario, expediente);
+                    Console.WriteLine("Se ha agregado correctamente el expediente");
+
                     break;
                 case 2:
 
@@ -46,12 +46,11 @@ while (continuar.Equals("y"))
                     idUsuario = int.Parse(Console.ReadLine() ?? "");
                     Console.WriteLine("Ingrese el id del expediente a dar de baja");
                     idExpedienteBaja = int.Parse(Console.ReadLine() ?? "");
-
                     CasoDeUsoExpedienteBaja casoDeUsoExpedienteBaja = new(expedienteRepo,
                     tramiteRepo,
                     servicioAutorizacionProvisorio);
-
                     casoDeUsoExpedienteBaja.Ejecutar(idUsuario, idExpedienteBaja);
+                    Console.WriteLine("Se han eliminado correctamente el expediente y sus trámites");
 
                     break;
                 case 3:
@@ -59,37 +58,24 @@ while (continuar.Equals("y"))
                     Console.WriteLine("Ingrese el id del expediente a consultar");
                     int idExpedienteConsulta = int.Parse(Console.ReadLine() ?? "");
                     CasoDeUsoExpedienteConsultaPorId casoDeUsoExpedienteConsultaPorId = new(expedienteRepo, tramiteRepo);
-                    Expediente? expedienteRes = casoDeUsoExpedienteConsultaPorId.Ejecutar(idExpedienteConsulta,
-                    out List<Tramite> listaTramites);
-
-                    if (expedienteRes != null)
-                    {
-                        Console.WriteLine(expedienteRes.ToString());
-                        Console.WriteLine("---------------------");
-                        if (listaTramites.Count != 0)
-                        {
-                            Console.WriteLine("Tramites asociados: ");
-                            Console.WriteLine("---------------------");
-                            foreach (Tramite t in listaTramites)
-                            {
-                                Console.WriteLine(t.ToString());
-                                Console.WriteLine("---------------------");
-                            }
-                        }
-                        else
-                            Console.WriteLine("No hay tramites asociados");
-                    }
-
+                    Expediente expedienteRes = casoDeUsoExpedienteConsultaPorId.Ejecutar(idExpedienteConsulta);
+                    Console.WriteLine(expedienteRes);
+                    Console.WriteLine(expedienteRes.TramitesToString());
                     break;
                 case 4:
-
                     CasoDeUsoExpedienteConsultaTodos casoDeUsoExpedienteConsultaTodos = new(expedienteRepo);
-                    List<Expediente>? listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
-                    if (listaExpedientes != null)
+                    List<Expediente> listaExpedientes = casoDeUsoExpedienteConsultaTodos.Ejecutar();
+                    if (listaExpedientes.Count > 0)
+                    {
+                        Console.WriteLine("Expedientes:");
                         foreach (Expediente e in listaExpedientes)
                         {
                             Console.WriteLine(e.ToString());
+                            Console.WriteLine("------------------");
                         }
+                    }
+                    else
+                        Console.WriteLine("No se encontro ningun expediente.");
                     break;
                 case 5:
 
@@ -102,15 +88,17 @@ while (continuar.Equals("y"))
                     Expediente expedienteModificacion = new(caratula) { Id = idExpedienteModificacion };
                     CasoDeUsoExpedienteModificacion casoDeUsoExpedienteModificacion = new(expedienteRepo, servicioAutorizacionProvisorio);
                     casoDeUsoExpedienteModificacion.Ejecutar(idUsuario, expedienteModificacion);
+                    Console.WriteLine("Se ha modificado correctamente el expediente");
+
                     break;
             }
 
         }
         else if (i == 2)
         {
-            Console.WriteLine("Para dar de alta un trámite, presione 1 ");
-            Console.WriteLine("Para dar de baja un trámite, presione 2 ");
-            Console.WriteLine("Para consultar un trámite por etiqueta, presione 3 ");
+            Console.WriteLine("Para dar de alta un tramite, presione 1 ");
+            Console.WriteLine("Para dar de baja un tramite, presione 2 ");
+            Console.WriteLine("Para consultar un tramite por etiqueta, presione 3 ");
             Console.WriteLine("Para modificar un tramite, presione 4 ");
             i = int.Parse(Console.ReadLine() ?? "");
             Tramite tramite;
@@ -127,14 +115,15 @@ while (continuar.Equals("y"))
                     Console.WriteLine("Ingrese id del expediente correspondiente");
                     tramite.ExpedienteId = int.Parse(Console.ReadLine() ?? "");
 
-                    Console.WriteLine("Ingrese la etiqueta del trámite");
+                    Console.WriteLine("Ingrese la etiqueta del tramite");
                     tramite.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), Console.ReadLine() ?? "", true);
 
-                    Console.WriteLine("Ingrese el contenido del trámite");
+                    Console.WriteLine("Ingrese el contenido del tramite");
                     tramite.Contenido = Console.ReadLine() ?? "";
 
                     CasoDeUsoTramiteAlta casoDeUsoTramiteAlta = new(tramiteRepo, expedienteRepo, servicioAutorizacionProvisorio, especificacionCambioDeEstado);
                     casoDeUsoTramiteAlta.Ejecutar(usuario, tramite);
+                    Console.WriteLine("Se ha agregado correctamente el tramite y se modifico el estado del expediente si es que fue necesario");
 
                     break;
                 case 2:
@@ -144,6 +133,7 @@ while (continuar.Equals("y"))
                     int idTramiteBaja = int.Parse(Console.ReadLine() ?? "");
                     CasoDeUsoTramiteBaja casoDeUsoTramiteBaja = new(tramiteRepo, expedienteRepo, servicioAutorizacionProvisorio, especificacionCambioDeEstado);
                     casoDeUsoTramiteBaja.Ejecutar(idUsuario, idTramiteBaja);
+                    Console.WriteLine("Se ha eliminado correctamente el tramite");
                     break;
                 case 3:
                     Console.WriteLine("Ingrese la etiqueta del tramite a consultar");
@@ -152,16 +142,15 @@ while (continuar.Equals("y"))
                     List<Tramite> listaTramites = casoDeUsoTramiteConsultaPorEtiqueta.Ejecutar(etiquetaTramiteConsulta);
                     if (listaTramites.Count > 0)
                     {
+                        Console.WriteLine("Tramites con la etiqueta ingresada:");
                         foreach (Tramite t in listaTramites)
                         {
                             Console.WriteLine(t.ToString());
-                            Console.WriteLine("---------------------");
+                            Console.WriteLine("------------------");
                         }
                     }
                     else
-                    {
                         Console.WriteLine("No se encontraron tramites con esa etiqueta");
-                    }
                     break;
                 case 4:
                     Console.WriteLine("Ingrese el id del usuario");
@@ -182,6 +171,8 @@ while (continuar.Equals("y"))
                     tramite.Contenido = Console.ReadLine() ?? "";
 
                     casoDeUsoTramiteModificacion.Ejecutar(idUsuario, tramite);
+                    Console.WriteLine("Se ha agregado modificado el tramite y el estado del expediente asignado si es que fue necesario");
+
                     break;
             }
         }

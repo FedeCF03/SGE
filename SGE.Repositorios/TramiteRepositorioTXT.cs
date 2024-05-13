@@ -114,28 +114,32 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
     }
 
 
-    public Tramite? BuscarPorId(int idTramite)
+    public Tramite BuscarPorId(int idTramite)
     {
-        Tramite auxiliar = new();
 
+        int n = -1;
         using StreamReader sr = new(NombreArch);
-        while (!sr.EndOfStream && ((auxiliar.Id = int.Parse(sr.ReadLine() ?? "-1")) != idTramite))
+        while (!sr.EndOfStream && ((n = int.Parse(sr.ReadLine() ?? "-1")) != idTramite))
         {
             for (int i = 0; i < 6; i++)
                 sr.ReadLine();
         }
-        if (auxiliar.Id == idTramite)
+        if (n != idTramite)
+            throw new RepositorioException("No se encontró un trámite con ese ID");
+        else
         {
-            auxiliar.ExpedienteId = int.Parse(sr.ReadLine() ?? "");
-            auxiliar.Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? "");
-            auxiliar.Contenido = sr.ReadLine();
-            auxiliar.FechaCreacion = DateTime.Parse(sr.ReadLine() ?? "");
-            auxiliar.FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? "");
-            auxiliar.UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "");
+            Tramite auxiliar = new()
+            {
+                Id = n,
+                ExpedienteId = int.Parse(sr.ReadLine() ?? ""),
+                Etiqueta = (EtiquetaTramite)Enum.Parse(typeof(EtiquetaTramite), sr.ReadLine() ?? ""),
+                Contenido = sr.ReadLine(),
+                FechaCreacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                FechaUltModificacion = DateTime.Parse(sr.ReadLine() ?? ""),
+                UsuarioUltModificacion = int.Parse(sr.ReadLine() ?? "")
+            };
             return auxiliar;
         }
-        else
-            return null;
     }
     private int DevolverIdInc()
     {
@@ -245,15 +249,23 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
             if (id == tramite.Id)
             {
                 sw.WriteLine(id);
+                sr.ReadLine();
                 sw.WriteLine(tramite.ExpedienteId);
+
+                sr.ReadLine();
                 sw.WriteLine(tramite.Etiqueta);
+
+                sr.ReadLine();
                 sw.WriteLine(tramite.Contenido);
-                sw.WriteLine(tramite.FechaCreacion);
+
+                sw.WriteLine(DateTime.Parse(sr.ReadLine() ?? ""));
+
+                sr.ReadLine();
                 sw.WriteLine(tramite.FechaUltModificacion);
+
+                sr.ReadLine();
                 sw.WriteLine(tramite.UsuarioUltModificacion);
 
-                for (int i = 0; i < 7; i++)
-                    sr.ReadLine();
                 sw.Write(sr.ReadToEnd());
             }
         }
@@ -298,8 +310,7 @@ public class TramiteRepositorioTXT : ITramiteRepositorio
         }
         if (resultado.Id != -1)
             return resultado;
-        throw new RepositorioException("No hay un expediente asociado al trámite.");
-
+        return null;
     }
 
 

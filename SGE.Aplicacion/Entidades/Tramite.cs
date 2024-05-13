@@ -24,7 +24,7 @@ public class Tramite
 
     public override string ToString()
     {
-        return $"Id: {Id,30}\n\rExpedienteId: {ExpedienteId,30}\n\rEtiqueta: {Etiqueta,30}\n\rContenido: {Contenido,30}\n\rFecha de creación: {FechaCreacion,30}\n\rFecha de última modificación: {FechaUltModificacion,30}\n\rNúmero de último usuario que modificó: {UsuarioUltModificacion,30}";
+        return $"{"ID: ",-40}{Id}\n\r{"ExpedienteId: ",-40}{ExpedienteId}\n\r{"Etiqueta: ",-40}{Etiqueta}\n\r{"Contenido: ",-40}{Contenido}\n\r{"Fecha de creacion: ",-40}{FechaCreacion:dd/MM/yyyy H:mm:ss}\n\r{"Fecha de ultima modificacion:",-40}{FechaUltModificacion:dd/MM/yyyy H:mm:ss}\n\r{"Numero de ultimo usuario que modifico: ",-40}{UsuarioUltModificacion}";
 
     }
 

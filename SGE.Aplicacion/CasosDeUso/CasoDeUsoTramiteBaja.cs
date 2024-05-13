@@ -10,7 +10,6 @@ public class CasoDeUsoTramiteBaja(ITramiteRepositorio tramiteRepositorio, IExped
 
         tramiteRepositorio.Baja(idTramite, out int idExpediente);
         ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, especificacionCambioDeEstado, idExpediente, usuario);
-        Console.WriteLine("Se ha eliminado correctamente el trámite");
         return this;
     }
 }

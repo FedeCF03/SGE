@@ -2,11 +2,11 @@
 
 public class CasoDeUsoExpedienteConsultaPorId(IExpedienteRepositorio expedienteRepositorio, ITramiteRepositorio tramiteRepositorio)
 {
-    public Expediente? Ejecutar(int id, out List<Tramite> tramites)
+    public Expediente Ejecutar(int id)
     {
 
-        Expediente? expediente = expedienteRepositorio.BuscarPorId(id) ?? throw new RepositorioException("No se encontró el expediente");
-        tramites = tramiteRepositorio.ListarTodosDeIdExpediente(id);
+        Expediente expediente = expedienteRepositorio.BuscarPorId(id);
+        expediente.ListaTramites = tramiteRepositorio.ListarTodosDeIdExpediente(id);
         return expediente;
     }
 }

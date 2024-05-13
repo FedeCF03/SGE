@@ -18,7 +18,6 @@ public class CasoDeUsoTramiteAlta(ITramiteRepositorio tramiteRepositorio, IExped
         tramiteRepositorio.Alta(tramite);
 
         ServicioActualizacionEstado.ActualizarEstado(tramiteRepositorio, expedienteRepositorio, especificacionCambioDeEstado, tramite.ExpedienteId, idUsuario);
-        Console.WriteLine("Se ha agregado correctamente el trámite y se modificó el estado del expediente si es que fue necesario");
         return this;
     }
 }
